@@ -1,0 +1,54 @@
+# support: https://bebedlastreat.fr/discord
+
+bot-token: token
+guild-id: 0000000000000000000 # id of the discord server the bot should fetch roles
+rename: true # rename a user to his minecraft name when he links his account
+
+ranks:
+  # warning: when a user unlink his account, he will get removed of all configured roles
+  exemple:
+    id: 0000000000000000000 # the discord id of the role, need developer mod enabled to get it
+    permission: "group.default" # the permission the player should have on minecraft
+
+database: "MariaDB" # Currently only MariaDB is supported but I will include later MongoDB support if it is requested (sql is better for use of this plugin)
+
+sql:
+  ip: 127.0.0.1
+  port: 3306
+  user: root
+  password: password
+  database: discord # database sould already be created
+  table: discord_sync # the table of the table used to store, automatically created
+  properties: "?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8"
+
+messages:
+  name: "name" # should not contain a space
+  ping-command: "Get bot latency"
+  link-command: "Link your Minecraft account on the server"
+  link-command-name: "The Minecraft account username you want to link"
+  unlink-command: "Unlink your Discord account from your Minecraft account"
+  minecraft-command: "Get the Minecraft account linked to a Discord account"
+  minecraft-command-name: "The Discord account"
+  discord-command: "Get the Discord account linked to a Minecraft account"
+  discord-command-name: "The Minecraft account username"
+
+  no-minecraft: "No Minecraft account found for this identifier"
+  results: "Results: "
+  no-discord: "No Discord account found for this username"
+  error: "Error"
+  already-link-minecraft: "This Discord account is already linked to a Minecraft account"
+  not-online: "This player is not online"
+  already-link-discord: "This Minecraft account is already linked to a Discord account"
+  validation: "Validation"
+  validation-desc: "To confirm the link between your Discord and Minecraft accounts, use\n`/link {id}`"
+  no-link-minecraft: "This Discord account is not linked to a Minecraft account"
+  success: "Success"
+  success-desc: "Your Discord account has been successfully unlinked from your Minecraft account"
+
+  link-usage: "§cUsage: /link <code>"
+  you-already-link: "§cYour Minecraft account is already linked to a Discord account."
+  link-success: "§aYour Minecraft account has been successfully linked to your Discord account!\n§aTo receive your Discord roles, simply log out and log back in."
+  invalid-code: "§cInvalid code!"
+  no-link: "§cYou haven't attempted to link your Minecraft account to your Discord account in the last 5 minutes."
+  not-linked: "§cYour Minecraft account is not linked to a Discord account."
+  unlink-success: "§aYour Minecraft account has been successfully unlinked from your Discord account!"

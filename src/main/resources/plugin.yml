@@ -1,0 +1,11 @@
+name: DiscordRankSync
+version: ${project.version}
+description: Allow user to link their discord to their minecraft account
+author: BebeDlaStreat
+main: fr.bebedlastreat.discord.spigot.DiscordSyncSpigot
+
+commands:
+  link:
+    description: Confirm link to your discord account
+  unlink:
+    description: Unlink from your discord account

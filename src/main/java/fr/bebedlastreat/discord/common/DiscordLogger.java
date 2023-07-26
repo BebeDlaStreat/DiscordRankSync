@@ -11,6 +11,6 @@ public class DiscordLogger {
     private final Logger logger = Logger.getLogger("DiscordRankSync");
 
     public void log(Level level, String message) {
-        logger.log(level, "[DiscordRankSync]" + message);
+        logger.log(level, "[DiscordRankSync] " + message);
     }
 }

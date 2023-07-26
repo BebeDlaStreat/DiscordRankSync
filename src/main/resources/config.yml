@@ -52,3 +52,4 @@ messages:
   no-link: "§cYou haven't attempted to link your Minecraft account to your Discord account in the last 5 minutes."
   not-linked: "§cYour Minecraft account is not linked to a Discord account."
   unlink-success: "§aYour Minecraft account has been successfully unlinked from your Discord account!"
+  stop-bot: "You just stopped the bot!"

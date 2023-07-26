@@ -9,3 +9,7 @@ commands:
     description: Confirm link to your discord account
   unlink:
     description: Unlink from your discord account
+  stopbot:
+    description: Stop the discord bot
+    permission: discord.stopbot
+    aliases: [stopdiscord]

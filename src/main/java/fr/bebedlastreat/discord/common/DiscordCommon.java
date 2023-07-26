@@ -1,5 +1,10 @@
 package fr.bebedlastreat.discord.common;
 
+import fr.bebedlastreat.discord.common.commands.LinkCommand;
+import fr.bebedlastreat.discord.common.commands.StopbotCommand;
+import fr.bebedlastreat.discord.common.commands.UnlinkCommand;
+import fr.bebedlastreat.discord.common.interfaces.IAsyncRunner;
+import fr.bebedlastreat.discord.common.interfaces.IOnlineCheck;
 import fr.bebedlastreat.discord.common.listeners.SlashCommandListener;
 import fr.bebedlastreat.discord.common.sql.SqlCredentials;
 import fr.bebedlastreat.discord.common.sql.SqlFetch;
@@ -35,14 +40,17 @@ public class DiscordCommon {
     private final Map<String, Object> credentials;
     private final Map<String, String> messages;
     private final IDatabaseFetch databaseFetch;
-    private final OnlineCheck onlineCheck;
+    private final IOnlineCheck onlineCheck;
     private final Map<String, WaitingLink> waitingLinks = new HashMap<>();
     private final List<DiscordRank> ranks;
-    private final AsyncRunner asyncRunner;
+    private final IAsyncRunner asyncRunner;
+    private final LinkCommand linkCommand;
+    private final UnlinkCommand unlinkCommand;
+    private final StopbotCommand stopbotCommand;
 
     private SqlHandler sqlHandler;
 
-    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, OnlineCheck onlineCheck, AsyncRunner asyncRunner) throws InterruptedException {
+    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, IAsyncRunner asyncRunner) throws InterruptedException {
         this.token = token;
         this.guildId = guildId;
         this.rename = rename;
@@ -53,6 +61,9 @@ public class DiscordCommon {
         this.databaseType = databaseType;
         this.credentials = credentials;
         this.ranks = ranks;
+        this.linkCommand = new LinkCommand(this);
+        this.unlinkCommand = new UnlinkCommand(this);
+        this.stopbotCommand = new StopbotCommand(this);
 
         switch (databaseType) {
             case SQL: {
@@ -152,17 +163,6 @@ public class DiscordCommon {
                 DiscordLogger.log(Level.WARNING, "the bot can't rename " + member.getUser().getName());
             }
         }
-    }
-
-    public interface OnlineCheck {
-
-        boolean isOnline(UUID uuid);
-
-        UUID getUuid(String name);
-    }
-
-    public interface AsyncRunner {
-        void runAsync(Runnable runnable);
     }
 
 }

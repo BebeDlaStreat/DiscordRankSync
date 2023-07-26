@@ -4,14 +4,16 @@ import fr.bebedlastreat.discord.common.DatabaseType;
 import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.DiscordLogger;
 import fr.bebedlastreat.discord.common.DiscordRank;
-import fr.bebedlastreat.discord.spigot.commands.LinkCommand;
-import fr.bebedlastreat.discord.spigot.commands.UnlinkCommand;
+import fr.bebedlastreat.discord.spigot.commands.SpigotLinkCommand;
+import fr.bebedlastreat.discord.spigot.commands.SpigotStopbotCommand;
+import fr.bebedlastreat.discord.spigot.commands.SpigotUnlinkCommand;
+import fr.bebedlastreat.discord.spigot.implementations.SpigotAsyncRunner;
+import fr.bebedlastreat.discord.spigot.implementations.SpigotOnlineCheck;
 import fr.bebedlastreat.discord.spigot.listeners.JoinListener;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -68,27 +70,11 @@ public class DiscordSyncSpigot extends JavaPlugin {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             DiscordLogger.log(Level.INFO, "Configurating the bot...");
             try {
-                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new DiscordCommon.OnlineCheck() {
-                    @Override
-                    public boolean isOnline(UUID uuid) {
-                        return Bukkit.getPlayer(uuid) != null;
-                    }
+                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new SpigotOnlineCheck(), new SpigotAsyncRunner());
 
-                    @Override
-                    public UUID getUuid(String name) {
-                        Player player = Bukkit.getPlayer(name);
-                        if (player != null) {
-                            return player.getUniqueId();
-                        } else {
-                            return null;
-                        }
-                    }
-                }, runnable -> {
-                    Bukkit.getScheduler().runTaskAsynchronously(this, runnable);
-                });
-
-                getCommand("link").setExecutor(new LinkCommand(common));
-                getCommand("unlink").setExecutor(new UnlinkCommand(common));
+                getCommand("link").setExecutor(new SpigotLinkCommand(common));
+                getCommand("unlink").setExecutor(new SpigotUnlinkCommand(common));
+                getCommand("stopbot").setExecutor(new SpigotStopbotCommand(common));
                 PluginManager pm = Bukkit.getPluginManager();
                 pm.registerEvents(new JoinListener(common), this);
             } catch (InterruptedException e) {

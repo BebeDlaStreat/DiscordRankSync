@@ -1,15 +1,14 @@
-package fr.bebedlastreat.discord.spigot.commands;
+package fr.bebedlastreat.discord.common.commands;
 
 import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.WaitingLink;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import fr.bebedlastreat.discord.common.interfaces.ICommonCommand;
+import fr.bebedlastreat.discord.common.interfaces.ICommonCommandSender;
+import fr.bebedlastreat.discord.common.interfaces.ICommonPlayer;
 
 import java.util.Map;
 
-public class LinkCommand implements CommandExecutor {
+public class LinkCommand implements ICommonCommand {
 
     private final DiscordCommon common;
 
@@ -18,13 +17,10 @@ public class LinkCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) return false;
-
-        Player player = (Player) sender;
+    public void execute(ICommonPlayer<?> player, String[] args) {
         if (args.length < 1) {
             player.sendMessage(common.getMessages().get("link-usage"));
-            return false;
+            return;
         }
 
         common.getAsyncRunner().runAsync(() -> {
@@ -54,7 +50,10 @@ public class LinkCommand implements CommandExecutor {
             }
             player.sendMessage(common.getMessages().get("no-link"));
         });
+    }
 
-        return false;
+    @Override
+    public void execute(ICommonCommandSender<?> sender, String[] args) {
+
     }
 }

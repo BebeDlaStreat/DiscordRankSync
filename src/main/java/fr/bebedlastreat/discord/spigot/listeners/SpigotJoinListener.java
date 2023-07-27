@@ -1,7 +1,7 @@
 package fr.bebedlastreat.discord.spigot.listeners;
 
 import fr.bebedlastreat.discord.common.DiscordCommon;
-import fr.bebedlastreat.discord.common.objects.DiscordRank;
+import fr.bebedlastreat.discord.spigot.implementations.SpigotPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,17 +18,6 @@ public class SpigotJoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        common.getAsyncRunner().runAsync(() -> {
-            String discord = common.getDatabaseFetch().discord(player.getUniqueId());
-            if (discord != null && discord.length() > 0) {
-                for (DiscordRank rank : common.getRanks()) {
-                    if (player.hasPermission(rank.getPermission())) {
-                        common.addRole(discord, rank);
-                    } else {
-                        common.removeRole(discord, rank);
-                    }
-                }
-            }
-        });
+        common.getJoinListener().execute(new SpigotPlayer(player));
     }
 }

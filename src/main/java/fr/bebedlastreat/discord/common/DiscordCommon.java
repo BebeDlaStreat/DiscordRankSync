@@ -8,6 +8,7 @@ import fr.bebedlastreat.discord.common.enums.ServerType;
 import fr.bebedlastreat.discord.common.interfaces.IAsyncRunner;
 import fr.bebedlastreat.discord.common.interfaces.IDatabaseFetch;
 import fr.bebedlastreat.discord.common.interfaces.IOnlineCheck;
+import fr.bebedlastreat.discord.common.listeners.JoinListener;
 import fr.bebedlastreat.discord.common.listeners.SlashCommandListener;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.common.objects.WaitingLink;
@@ -53,6 +54,7 @@ public class DiscordCommon {
     private final LinkCommand linkCommand;
     private final UnlinkCommand unlinkCommand;
     private final StopbotCommand stopbotCommand;
+    private final JoinListener joinListener;
     private final ServerType serverType;
     private int linkCount = 0;
 
@@ -73,6 +75,7 @@ public class DiscordCommon {
         this.linkCommand = new LinkCommand(this);
         this.unlinkCommand = new UnlinkCommand(this);
         this.stopbotCommand = new StopbotCommand(this);
+        this.joinListener = new JoinListener(this);
 
         switch (databaseType) {
             case SQL: {

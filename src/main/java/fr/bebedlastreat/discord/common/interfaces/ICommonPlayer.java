@@ -9,4 +9,6 @@ public interface ICommonPlayer <T> {
     UUID getUniqueId();
 
     String getName();
+
+    boolean hasPermission(String permission);
 }

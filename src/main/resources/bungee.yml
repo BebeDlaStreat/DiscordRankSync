@@ -1,0 +1,15 @@
+name: DiscordRankSync
+version: ${project.version}
+description: Allow user to link their discord to their minecraft account
+author: BebeDlaStreat
+main: fr.bebedlastreat.discord.bungeecord.DiscordSyncBungee
+
+commands:
+  link:
+    description: Confirm link to your discord account
+  unlink:
+    description: Unlink from your discord account
+  stopbot:
+    description: Stop the discord bot
+    permission: discord.stopbot
+    aliases: [stopdiscord]

@@ -1,6 +1,6 @@
 package fr.bebedlastreat.discord.common.sql;
 
-import fr.bebedlastreat.discord.common.IDatabaseFetch;
+import fr.bebedlastreat.discord.common.interfaces.IDatabaseFetch;
 
 import java.sql.SQLException;
 import java.util.UUID;

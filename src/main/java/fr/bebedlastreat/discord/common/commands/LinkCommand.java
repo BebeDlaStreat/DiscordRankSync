@@ -1,7 +1,7 @@
 package fr.bebedlastreat.discord.common.commands;
 
 import fr.bebedlastreat.discord.common.DiscordCommon;
-import fr.bebedlastreat.discord.common.WaitingLink;
+import fr.bebedlastreat.discord.common.objects.WaitingLink;
 import fr.bebedlastreat.discord.common.interfaces.ICommonCommand;
 import fr.bebedlastreat.discord.common.interfaces.ICommonCommandSender;
 import fr.bebedlastreat.discord.common.interfaces.ICommonPlayer;

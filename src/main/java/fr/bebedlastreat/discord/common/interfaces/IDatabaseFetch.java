@@ -1,4 +1,4 @@
-package fr.bebedlastreat.discord.common;
+package fr.bebedlastreat.discord.common.interfaces;
 
 import java.util.UUID;
 

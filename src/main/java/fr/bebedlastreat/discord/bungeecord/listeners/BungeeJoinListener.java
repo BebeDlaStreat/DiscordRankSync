@@ -1,23 +1,23 @@
-package fr.bebedlastreat.discord.spigot.listeners;
+package fr.bebedlastreat.discord.bungeecord.listeners;
 
 import fr.bebedlastreat.discord.common.DiscordCommon;
-import fr.bebedlastreat.discord.common.DiscordRank;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import fr.bebedlastreat.discord.common.objects.DiscordRank;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.event.EventHandler;
 
-public class JoinListener implements Listener {
+public class BungeeJoinListener implements Listener {
 
     private final DiscordCommon common;
 
-    public JoinListener(DiscordCommon common) {
+    public BungeeJoinListener(DiscordCommon common) {
         this.common = common;
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-        Player player = e.getPlayer();
+    public void onJoin(PostLoginEvent e) {
+        ProxiedPlayer player = e.getPlayer();
         common.getAsyncRunner().runAsync(() -> {
             String discord = common.getDatabaseFetch().discord(player.getUniqueId());
             if (discord != null && discord.length() > 0) {

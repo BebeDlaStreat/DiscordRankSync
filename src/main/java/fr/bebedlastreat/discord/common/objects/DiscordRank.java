@@ -1,4 +1,4 @@
-package fr.bebedlastreat.discord.common;
+package fr.bebedlastreat.discord.common.objects;
 
 import lombok.Data;
 import net.dv8tion.jda.api.entities.Role;

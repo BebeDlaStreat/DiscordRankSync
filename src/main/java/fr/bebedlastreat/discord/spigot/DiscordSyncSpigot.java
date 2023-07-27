@@ -1,15 +1,15 @@
 package fr.bebedlastreat.discord.spigot;
 
-import fr.bebedlastreat.discord.common.DatabaseType;
+import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.DiscordLogger;
-import fr.bebedlastreat.discord.common.DiscordRank;
+import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.spigot.commands.SpigotLinkCommand;
 import fr.bebedlastreat.discord.spigot.commands.SpigotStopbotCommand;
 import fr.bebedlastreat.discord.spigot.commands.SpigotUnlinkCommand;
 import fr.bebedlastreat.discord.spigot.implementations.SpigotAsyncRunner;
 import fr.bebedlastreat.discord.spigot.implementations.SpigotOnlineCheck;
-import fr.bebedlastreat.discord.spigot.listeners.JoinListener;
+import fr.bebedlastreat.discord.spigot.listeners.SpigotJoinListener;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -76,7 +76,7 @@ public class DiscordSyncSpigot extends JavaPlugin {
                 getCommand("unlink").setExecutor(new SpigotUnlinkCommand(common));
                 getCommand("stopbot").setExecutor(new SpigotStopbotCommand(common));
                 PluginManager pm = Bukkit.getPluginManager();
-                pm.registerEvents(new JoinListener(common), this);
+                pm.registerEvents(new SpigotJoinListener(common), this);
             } catch (InterruptedException e) {
                 DiscordLogger.log(Level.SEVERE, "Failed to enable discord bot");
                 e.printStackTrace();

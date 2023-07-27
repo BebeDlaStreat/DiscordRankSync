@@ -1,8 +1,8 @@
 package fr.bebedlastreat.discord.common.listeners;
 
 import fr.bebedlastreat.discord.common.DiscordCommon;
-import fr.bebedlastreat.discord.common.DiscordRank;
-import fr.bebedlastreat.discord.common.WaitingLink;
+import fr.bebedlastreat.discord.common.objects.DiscordRank;
+import fr.bebedlastreat.discord.common.objects.WaitingLink;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

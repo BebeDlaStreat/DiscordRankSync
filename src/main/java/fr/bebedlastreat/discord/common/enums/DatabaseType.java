@@ -1,4 +1,4 @@
-package fr.bebedlastreat.discord.common;
+package fr.bebedlastreat.discord.common.enums;
 
 public enum DatabaseType {
     SQL;

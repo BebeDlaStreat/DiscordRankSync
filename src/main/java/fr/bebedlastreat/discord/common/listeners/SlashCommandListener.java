@@ -80,6 +80,7 @@ public class SlashCommandListener extends ListenerAdapter {
                 return;
             }
             common.getDatabaseFetch().delete(user.getId());
+            common.setLinkCount(common.getLinkCount() - 1);
             common.getAsyncRunner().runAsync(() -> {
                 for (DiscordRank rank : common.getRanks()) {
                     common.removeRole(user.getId(), rank);

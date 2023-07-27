@@ -103,4 +103,19 @@ public class SqlFetch implements IDatabaseFetch {
         });
     }
 
+    @Override
+    public int count() {
+        return (Integer) sql.query("SELECT COUNT(*) FROM " + sql.getTable(), rs -> {
+            int result = 0;
+            try {
+                if (rs.next()) {
+                    result = rs.getInt("COUNT(*)");
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return result;
+        });
+    }
+
 }

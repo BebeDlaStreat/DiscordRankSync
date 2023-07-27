@@ -39,6 +39,7 @@ public class LinkCommand implements ICommonCommand {
                 if (waitingLink.getUuid().equals(player.getUniqueId())) {
                     if (code.equalsIgnoreCase(waitingLink.getCode())) {
                         common.getDatabaseFetch().insert(waitingLink.getUuid(), player.getName(), waitingLink.getDiscordId());
+                        common.setLinkCount(common.getLinkCount() + 1);
                         common.rename(waitingLink.getDiscordId(), player.getName());
                         player.sendMessage(common.getMessages().get("link-success"));
                         common.getWaitingLinks().remove(s);

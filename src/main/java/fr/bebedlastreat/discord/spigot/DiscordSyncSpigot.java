@@ -1,8 +1,10 @@
 package fr.bebedlastreat.discord.spigot;
 
+import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.DiscordLogger;
+import fr.bebedlastreat.discord.common.enums.ServerType;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.spigot.commands.SpigotLinkCommand;
 import fr.bebedlastreat.discord.spigot.commands.SpigotStopbotCommand;
@@ -12,6 +14,7 @@ import fr.bebedlastreat.discord.spigot.implementations.SpigotOnlineCheck;
 import fr.bebedlastreat.discord.spigot.listeners.SpigotJoinListener;
 import lombok.Getter;
 import lombok.Setter;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.PluginManager;
@@ -28,6 +31,7 @@ public class DiscordSyncSpigot extends JavaPlugin {
     private static DiscordSyncSpigot instance;
 
     private DiscordCommon common;
+    private Metrics metrics;
 
     @Override
     public void onEnable() {
@@ -70,13 +74,21 @@ public class DiscordSyncSpigot extends JavaPlugin {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             DiscordLogger.log(Level.INFO, "Configurating the bot...");
             try {
-                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new SpigotOnlineCheck(), new SpigotAsyncRunner());
+                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new SpigotOnlineCheck(), new SpigotAsyncRunner(), ServerType.SPIGOT);
 
                 getCommand("link").setExecutor(new SpigotLinkCommand(common));
                 getCommand("unlink").setExecutor(new SpigotUnlinkCommand(common));
                 getCommand("stopbot").setExecutor(new SpigotStopbotCommand(common));
                 PluginManager pm = Bukkit.getPluginManager();
                 pm.registerEvents(new SpigotJoinListener(common), this);
+
+                metrics = new Metrics(this, DiscordCommon.METRICS_ID);
+                metrics.addCustomChart(new DiscordCountChart());
+                metrics.addCustomChart(new DiscordOnlineChart());
+                metrics.addCustomChart(new LinkCountChart());
+                metrics.addCustomChart(new RankCountChart());
+                metrics.addCustomChart(new RenameChart());
+                metrics.addCustomChart(new ServerTypeChart());
             } catch (InterruptedException e) {
                 DiscordLogger.log(Level.SEVERE, "Failed to enable discord bot");
                 e.printStackTrace();

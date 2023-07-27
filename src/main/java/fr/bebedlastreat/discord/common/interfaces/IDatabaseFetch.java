@@ -23,4 +23,6 @@ public interface IDatabaseFetch {
     String uuid(String discord);
 
     String name(UUID uuid);
+
+    int count();
 }

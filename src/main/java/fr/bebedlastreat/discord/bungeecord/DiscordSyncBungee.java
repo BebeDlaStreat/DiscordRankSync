@@ -6,9 +6,11 @@ import fr.bebedlastreat.discord.bungeecord.commands.BungeeUnlinkCommand;
 import fr.bebedlastreat.discord.bungeecord.implementations.BungeeAsyncRunner;
 import fr.bebedlastreat.discord.bungeecord.implementations.BungeeOnlineCheck;
 import fr.bebedlastreat.discord.bungeecord.listeners.BungeeJoinListener;
+import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.DiscordLogger;
+import fr.bebedlastreat.discord.common.enums.ServerType;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +20,7 @@ import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import org.bstats.bungeecord.Metrics;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +40,7 @@ public class DiscordSyncBungee extends Plugin {
 
     private DiscordCommon common;
     private Configuration config;
+    private Metrics metrics;
 
     @Override
     public void onEnable() {
@@ -79,13 +83,21 @@ public class DiscordSyncBungee extends Plugin {
         ProxyServer.getInstance().getScheduler().runAsync(this, () -> {
             DiscordLogger.log(Level.INFO, "Configurating the bot...");
             try {
-                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new BungeeOnlineCheck(), new BungeeAsyncRunner());
+                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new BungeeOnlineCheck(), new BungeeAsyncRunner(), ServerType.BUNGEECORD);
 
                 PluginManager pm = ProxyServer.getInstance().getPluginManager();
                 pm.registerCommand(this, new BungeeLinkCommand(common));
                 pm.registerCommand(this, new BungeeUnlinkCommand(common));
                 pm.registerCommand(this, new BungeeStopbotCommand(common));
                 pm.registerListener(this, new BungeeJoinListener(common));
+
+                metrics = new Metrics(this, DiscordCommon.METRICS_ID);
+                metrics.addCustomChart(new DiscordCountChart());
+                metrics.addCustomChart(new DiscordOnlineChart());
+                metrics.addCustomChart(new LinkCountChart());
+                metrics.addCustomChart(new RankCountChart());
+                metrics.addCustomChart(new RenameChart());
+                metrics.addCustomChart(new ServerTypeChart());
             } catch (InterruptedException e) {
                 DiscordLogger.log(Level.SEVERE, "Failed to enable discord bot");
                 e.printStackTrace();

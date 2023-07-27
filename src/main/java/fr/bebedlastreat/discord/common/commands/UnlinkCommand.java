@@ -27,6 +27,7 @@ public class UnlinkCommand implements ICommonCommand {
             }
 
             common.getDatabaseFetch().delete(player.getUniqueId());
+            common.setLinkCount(common.getLinkCount() - 1);
             player.sendMessage(common.getMessages().get("unlink-success"));
         });
     }

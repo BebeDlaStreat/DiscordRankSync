@@ -119,8 +119,4 @@ public class DiscordSyncBungee extends Plugin {
             e.printStackTrace();
         }
     }
-
-    public Configuration getConfig() {
-        return this.config;
-    }
 }

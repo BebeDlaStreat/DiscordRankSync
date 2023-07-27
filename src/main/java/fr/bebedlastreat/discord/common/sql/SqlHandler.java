@@ -38,6 +38,7 @@ public class SqlHandler {
 
     private void setup() {
         HikariConfig config = new HikariConfig();
+        config.setDriverClassName("com.mysql.jdbc.Driver");
         config.setMaximumPoolSize(maxPoolSize);
         config.setMinimumIdle(minIdle);
         config.setMaxLifetime(maxLifetime);

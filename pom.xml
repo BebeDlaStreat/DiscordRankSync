@@ -6,7 +6,7 @@
 
     <groupId>fr.bebedlastreat</groupId>
     <artifactId>DiscordRankSync</artifactId>
-    <version>1.0-${git.commit.id.abbrev}</version>
+    <version>1.1-${git.commit.id.abbrev}</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -23,14 +23,23 @@
             <id>bungeecord-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
+        <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
     </repositories>
-
     <dependencies>
         <!-- HikariCIP -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>4.0.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.32</version>
             <scope>compile</scope>
         </dependency>
         <!-- JDA -->
@@ -65,6 +74,12 @@
             <version>3.0.2</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-velocity</artifactId>
+            <version>3.0.2</version>
+            <scope>compile</scope>
+        </dependency>
 
 
         <!-- Spigot -->
@@ -86,6 +101,15 @@
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-api</artifactId>
             <version>1.20-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Velocity -->
+        <dependency>
+            <groupId>com.velocitypowered</groupId>
+            <artifactId>velocity-api</artifactId>
+            <version>3.1.1</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
@@ -94,8 +118,8 @@
         <finalName>${project.name}</finalName>
         <resources>
             <resource>
-                <directory>src/main/resources</directory> <!-- (your resources folder location) -->
-                <filtering>true</filtering> <!-- this is the important part, it's what replaces, filters, all placeholders in the resources folder (such as ${project.version} in plugin.yml) -->
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
             </resource>
         </resources>
         <plugins>
@@ -157,6 +181,10 @@
                             <pattern>net.dv8tion</pattern>
                             <shadedPattern>fr.bebedlastreat</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>com.mysql</pattern>
+                            <shadedPattern>fr.bebedlastreat.mysql</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -165,6 +193,49 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.3</version>
+                <executions>
+                    <execution>
+                        <id>add-version</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>${project.basedir}/src/main/java/fr/bebedlastreat/discord/velocity/DiscordSyncVelocity.java</include>
+                            </includes>
+                            <replacements>
+                                <replacement>
+                                    <token>version = ".*"</token>
+                                    <value>version = "${project.version}"</value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>remove-version</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>${project.basedir}/src/main/java/fr/bebedlastreat/discord/velocity/DiscordSyncVelocity.java</include>
+                            </includes>
+                            <replacements>
+                                <replacement>
+                                    <token>version = ".*"</token>
+                                    <value>version = "${project.version}"</value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

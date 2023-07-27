@@ -1,6 +1,6 @@
 # support: https://bebedlastreat.fr/discord
 
-bot-token: token
+bot-token: "token"
 guild-id: "0000000000000000000" # id of the discord server the bot should fetch roles
 rename: true # rename a user to his minecraft name when he links his account
 

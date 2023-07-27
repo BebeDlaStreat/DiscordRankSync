@@ -20,7 +20,7 @@ public class SqlFetch implements IDatabaseFetch {
 
     @Override
     public void update(UUID uuid, String name) {
-        sql.update("UPDATE " + sql.getTable() + " SET name = ? WHERE uuid = ?", name, uuid);
+        sql.update("UPDATE " + sql.getTable() + " SET name=? WHERE uuid=?", name, uuid.toString());
     }
 
     @Override

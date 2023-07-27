@@ -105,7 +105,7 @@ public class DiscordCommon {
                 .queue(command -> DiscordLogger.log(Level.INFO, command.getName() + " command added"));
 
         jda.upsertCommand("link", messages.get("link-command"))
-                .addOption(OptionType.STRING, "name", messages.get("link-command-name"), true)
+                .addOption(OptionType.STRING, messages.get("name"), messages.get("link-command-name"), true)
                 .queue(command -> DiscordLogger.log(Level.INFO, command.getName() + " command added"));
 
         jda.upsertCommand("unlink", messages.get("unlink-command"))
@@ -113,12 +113,12 @@ public class DiscordCommon {
 
         jda.upsertCommand("minecraft", messages.get("minecraft-command"))
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
-                .addOption(OptionType.USER, "name", messages.get("minecraft-command-name"), true)
+                .addOption(OptionType.USER, messages.get("name"), messages.get("minecraft-command-name"), true)
                 .queue(command -> DiscordLogger.log(Level.INFO, command.getName() + " command added"));
 
         jda.upsertCommand("discord", messages.get("discord-command"))
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
-                .addOption(OptionType.STRING, "name", messages.get("discord-command-name"), true)
+                .addOption(OptionType.STRING, messages.get("name"), messages.get("discord-command-name"), true)
                 .queue(command -> DiscordLogger.log(Level.INFO, command.getName() + " command added"));
         jda.awaitReady();
         guild = jda.getGuildById(guildId);

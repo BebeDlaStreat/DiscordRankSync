@@ -232,7 +232,7 @@
                             <replacements>
                                 <replacement>
                                     <token>version = ".*"</token>
-                                    <value>version = "${project.version}"</value>
+                                    <value>version = "\$\{project.version\}"</value>
                                 </replacement>
                             </replacements>
                         </configuration>

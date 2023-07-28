@@ -41,7 +41,7 @@ import java.util.logging.Level;
 @Plugin(
         id = "discordsyncvelocity",
         name = "DiscordSyncVelocity",
-        version = "1.2-bb34971",
+        version = "${project.version}",
         authors = "BebeDlaStreat",
         description = "Allow user to link their discord to their minecraft account"
 )

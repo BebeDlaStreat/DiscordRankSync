@@ -14,7 +14,9 @@ database: "MariaDB" # Currently only MariaDB is supported but I will include lat
 
 reward-command: "" # command executed when a player links his account for the first time (user {player} as placeholder for player name)
 
-boost-reward: "" # command to execute when a player boost the server, need to enable intents in your bot app https://i.imgur.com/y9CqcRR.png
+boost-reward: "" # command to execute when a player with boost rank execute /claimboost, can be executed every months
+
+date-format: "MM/dd/yy hh:mm aa" # see https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
 
 sql:
   ip: "127.0.0.1"
@@ -59,3 +61,7 @@ messages:
   stop-bot: "You just stopped the bot!"
 
   join-message: "" # a message sent to unlinked players on join, let it empty for no join message
+
+  not-boosting: "§cYou need to boost our discord server to claim this reward"
+  boost-countdown: "§cYou already claim your reward this month, please wait until {date}"
+  boost-claim: "§aYou successfully claimed your boost reward"

@@ -25,6 +25,7 @@ public class SqlHandler {
     private long connectionTimeout;
     private final String table;
     private final String allTimeTable;
+    private final String boostTable;
 
     public SqlHandler(SqlCredentials credentials, int maxPoolSize, int minIdle, long maxLifetime, long keepaliveTime, long connectionTimeout, String table) {
         this.credentials = credentials;
@@ -36,6 +37,7 @@ public class SqlHandler {
         this.connectionTimeout = connectionTimeout;
         this.table = table;
         this.allTimeTable = table + "_alltime";
+        this.boostTable = table + "_boost";
     }
 
     private void setup() {
@@ -130,6 +132,10 @@ public class SqlHandler {
                 ")");
         update("CREATE TABLE IF NOT EXISTS " + allTimeTable + "(" +
                 "uuid VARCHAR(64) PRIMARY KEY NOT NULL" +
+                ")");
+        update("CREATE TABLE IF NOT EXISTS " + boostTable + "(" +
+                "uuid VARCHAR(64) PRIMARY KEY NOT NULL, " +
+                "finish_time BIGINT" +
                 ")");
     }
 }

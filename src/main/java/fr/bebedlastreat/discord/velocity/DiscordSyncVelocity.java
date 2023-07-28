@@ -15,6 +15,7 @@ import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.enums.ServerType;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
+import fr.bebedlastreat.discord.velocity.commands.VelocityClaimBoostCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityLinkCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityStopbotCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityUnlinkCommand;
@@ -40,7 +41,7 @@ import java.util.logging.Level;
 @Plugin(
         id = "discordsyncvelocity",
         name = "DiscordSyncVelocity",
-        version = "1.1-833423a",
+        version = "1.2-bb34971",
         authors = "BebeDlaStreat",
         description = "Allow user to link their discord to their minecraft account"
 )
@@ -109,7 +110,7 @@ public class DiscordSyncVelocity {
         server.getScheduler().buildTask(this, () -> {
             DiscordLogger.log(Level.INFO, "Configurating the bot...");
             try {
-                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new VelocityOnlineCheck(), new VelocityAsyncRunner(), new VelocityConsoleExecutor(), ServerType.VELOCITY, config.getString("reward-command"));
+                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new VelocityOnlineCheck(), new VelocityAsyncRunner(), new VelocityConsoleExecutor(), ServerType.VELOCITY, config.getString("reward-command"), config.getString("boost-reward"), config.getString("date-format"));
 
                 EventManager eventManager = server.getEventManager();
                 CommandManager commandManager = server.getCommandManager();
@@ -119,6 +120,8 @@ public class DiscordSyncVelocity {
                 commandManager.register(link, new VelocityLinkCommand(common));
                 CommandMeta unlink = commandManager.metaBuilder("unlink").build();
                 commandManager.register(unlink, new VelocityUnlinkCommand(common));
+                CommandMeta claimBoost = commandManager.metaBuilder("claimboost").build();
+                commandManager.register(claimBoost, new VelocityClaimBoostCommand(common));
                 CommandMeta stopbot = commandManager.metaBuilder("stopbot").aliases("stopdiscord").build();
                 commandManager.register(stopbot, new VelocityStopbotCommand(common));
 

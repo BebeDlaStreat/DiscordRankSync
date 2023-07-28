@@ -29,4 +29,12 @@ public interface IDatabaseFetch {
     String name(UUID uuid);
 
     int count();
+
+    void insertBoost(UUID uuid, long time);
+
+    void deleteBoost(UUID uuid);
+
+    boolean canBoost(UUID uuid);
+
+    long getNextBoost(UUID uuid);
 }

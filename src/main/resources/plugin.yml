@@ -8,7 +8,9 @@ commands:
   link:
     description: Confirm link to your discord account
   unlink:
-    description: Unlink from your discord account
+    description: Unlink from your discord accoun
+  claimboost:
+    description: Claim boost reward
   stopbot:
     description: Stop the discord bot
     permission: discord.stopbot

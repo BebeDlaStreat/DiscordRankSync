@@ -6,6 +6,7 @@ import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.DiscordLogger;
 import fr.bebedlastreat.discord.common.enums.ServerType;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
+import fr.bebedlastreat.discord.spigot.commands.SpigotClaimBoostCommand;
 import fr.bebedlastreat.discord.spigot.commands.SpigotLinkCommand;
 import fr.bebedlastreat.discord.spigot.commands.SpigotStopbotCommand;
 import fr.bebedlastreat.discord.spigot.commands.SpigotUnlinkCommand;
@@ -75,10 +76,11 @@ public class DiscordSyncSpigot extends JavaPlugin {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             DiscordLogger.log(Level.INFO, "Configurating the bot...");
             try {
-                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new SpigotOnlineCheck(), new SpigotAsyncRunner(), new VelocityConsoleExecutor(), ServerType.SPIGOT, getConfig().getString("reward-command"));
+                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new SpigotOnlineCheck(), new SpigotAsyncRunner(), new VelocityConsoleExecutor(), ServerType.SPIGOT, getConfig().getString("reward-command"), getConfig().getString("boost-reward"), getConfig().getString("date-format"));
 
                 getCommand("link").setExecutor(new SpigotLinkCommand(common));
                 getCommand("unlink").setExecutor(new SpigotUnlinkCommand(common));
+                getCommand("claimboost").setExecutor(new SpigotClaimBoostCommand(common));
                 getCommand("stopbot").setExecutor(new SpigotStopbotCommand(common));
                 PluginManager pm = Bukkit.getPluginManager();
                 pm.registerEvents(new SpigotJoinListener(common), this);

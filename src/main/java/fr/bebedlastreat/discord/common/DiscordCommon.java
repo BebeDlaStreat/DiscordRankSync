@@ -1,5 +1,6 @@
 package fr.bebedlastreat.discord.common;
 
+import fr.bebedlastreat.discord.common.commands.ClaimBoostCommand;
 import fr.bebedlastreat.discord.common.commands.LinkCommand;
 import fr.bebedlastreat.discord.common.commands.StopbotCommand;
 import fr.bebedlastreat.discord.common.commands.UnlinkCommand;
@@ -28,9 +29,8 @@ import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -57,15 +57,18 @@ public class DiscordCommon {
     private final IConsoleExecutor consoleExecutor;
     private final LinkCommand linkCommand;
     private final UnlinkCommand unlinkCommand;
+    private final ClaimBoostCommand claimBoostCommand;
     private final StopbotCommand stopbotCommand;
     private final JoinListener joinListener;
     private final ServerType serverType;
     private int linkCount = 0;
     private final String rewardCommand;
+    private final String boostReward;
+    private final SimpleDateFormat sdf;
 
     private SqlHandler sqlHandler;
 
-    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, IAsyncRunner asyncRunner, IConsoleExecutor consoleExecutor, ServerType serverType, String rewardCommand) throws InterruptedException {
+    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, IAsyncRunner asyncRunner, IConsoleExecutor consoleExecutor, ServerType serverType, String rewardCommand, String boostReward, String dataFormat) throws InterruptedException {
         this.token = token;
         this.guildId = guildId;
         this.rename = rename;
@@ -75,12 +78,15 @@ public class DiscordCommon {
         this.consoleExecutor = consoleExecutor;
         this.serverType = serverType;
         this.rewardCommand = rewardCommand;
+        this.boostReward = boostReward;
+        this.sdf = new SimpleDateFormat(dataFormat);
         instance = this;
         this.databaseType = databaseType;
         this.credentials = credentials;
         this.ranks = ranks;
         this.linkCommand = new LinkCommand(this);
         this.unlinkCommand = new UnlinkCommand(this);
+        this.claimBoostCommand = new ClaimBoostCommand(this);
         this.stopbotCommand = new StopbotCommand(this);
         this.joinListener = new JoinListener(this);
 

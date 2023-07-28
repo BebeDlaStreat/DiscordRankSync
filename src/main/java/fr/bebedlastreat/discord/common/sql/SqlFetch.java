@@ -138,4 +138,45 @@ public class SqlFetch implements IDatabaseFetch {
         });
     }
 
+    @Override
+    public void insertBoost(UUID uuid, long time) {
+        sql.update("INSERT INTO " + sql.getBoostTable() + " (uuid, finish_time) VALUES (?, ?)", uuid.toString(), time);
+    }
+
+    @Override
+    public void deleteBoost(UUID uuid) {
+        sql.update("DELETE FROM " + sql.getBoostTable() + " WHERE uuid=?", uuid.toString());
+    }
+
+    @Override
+    public boolean canBoost(UUID uuid) {
+        return (Boolean) sql.query("SELECT finish_time FROM " + sql.getBoostTable(), rs -> {
+            boolean result = true;
+            try {
+                if (rs.next()) {
+                    long time = rs.getLong("finish_time");
+                    result = System.currentTimeMillis() > time;
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return result;
+        });
+    }
+
+    @Override
+    public long getNextBoost(UUID uuid) {
+        return (Long) sql.query("SELECT finish_time FROM " + sql.getBoostTable(), rs -> {
+            long result = 0;
+            try {
+                if (rs.next()) {
+                    result = rs.getLong("finish_time");
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return result;
+        });
+    }
+
 }

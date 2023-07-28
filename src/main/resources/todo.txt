@@ -1,2 +1,0 @@
-- send message to unlinked players on join
-- run command on link (store all time link to avoid multiple command)

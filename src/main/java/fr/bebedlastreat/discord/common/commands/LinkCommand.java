@@ -43,6 +43,12 @@ public class LinkCommand implements ICommonCommand {
                         common.rename(waitingLink.getDiscordId(), player.getName());
                         player.sendMessage(common.getMessages().get("link-success"));
                         common.getWaitingLinks().remove(s);
+                        if (common.getDatabaseFetch().firstLink(player.getUniqueId())) {
+                            common.getDatabaseFetch().insertFirstLink(player.getUniqueId());
+                            if (!common.getRewardCommand().isEmpty()) {
+                                common.getConsoleExecutor().execute(common.getRewardCommand().replace("{player}", player.getName()));
+                            }
+                        }
                     } else {
                         player.sendMessage(common.getMessages().get("invalid-code"));
                     }

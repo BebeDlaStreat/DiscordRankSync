@@ -24,6 +24,26 @@ public class SqlFetch implements IDatabaseFetch {
     }
 
     @Override
+    public boolean firstLink(UUID uuid) {
+        return (Boolean) sql.query("SELECT uuid FROM " + sql.getAllTimeTable() + " WHERE uuid='" + uuid + "'", rs -> {
+            boolean result = true;
+            try {
+                if (rs.next()) {
+                    result = false;
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return result;
+        });
+    }
+
+    @Override
+    public void insertFirstLink(UUID uuid) {
+        sql.update("INSERT INTO " + sql.getAllTimeTable() + " (uuid) VALUES (?)", uuid.toString());
+    }
+
+    @Override
     public void delete(UUID uuid) {
         sql.update("DELETE FROM " + sql.getTable() + " WHERE uuid=?", uuid.toString());
     }

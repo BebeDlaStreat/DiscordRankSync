@@ -23,7 +23,8 @@ public class SqlHandler {
     private long maxLifetime;
     private long keepaliveTime;
     private long connectionTimeout;
-    private String table;
+    private final String table;
+    private final String allTimeTable;
 
     public SqlHandler(SqlCredentials credentials, int maxPoolSize, int minIdle, long maxLifetime, long keepaliveTime, long connectionTimeout, String table) {
         this.credentials = credentials;
@@ -34,6 +35,7 @@ public class SqlHandler {
         this.keepaliveTime = keepaliveTime;
         this.connectionTimeout = connectionTimeout;
         this.table = table;
+        this.allTimeTable = table + "_alltime";
     }
 
     private void setup() {
@@ -125,6 +127,9 @@ public class SqlHandler {
                 "uuid VARCHAR(64) PRIMARY KEY NOT NULL, " +
                 "name VARCHAR(32) NOT NULL," +
                 "discord VARCHAR(32) NOT NULL UNIQUE" +
+                ")");
+        update("CREATE TABLE IF NOT EXISTS " + allTimeTable + "(" +
+                "uuid VARCHAR(64) PRIMARY KEY NOT NULL" +
                 ")");
     }
 }

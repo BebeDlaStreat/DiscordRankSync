@@ -8,6 +8,10 @@ public interface IDatabaseFetch {
 
     void update(UUID uuid, String name);
 
+    boolean firstLink(UUID uuid);
+
+    void insertFirstLink(UUID uuid);
+
     void delete(UUID uuid);
 
     void delete(String discord);

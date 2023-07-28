@@ -25,6 +25,11 @@ public class JoinListener implements ICommonListener {
                     }
                 }
                 common.getDatabaseFetch().update(player.getUniqueId(), player.getName());
+            } else {
+                String joinMessage = common.getMessages().getOrDefault("join-message", "");
+                if (!joinMessage.isEmpty()) {
+                    player.sendMessage(joinMessage);
+                }
             }
         });
     }

@@ -4,6 +4,7 @@ import fr.bebedlastreat.discord.bungeecord.commands.BungeeLinkCommand;
 import fr.bebedlastreat.discord.bungeecord.commands.BungeeStopbotCommand;
 import fr.bebedlastreat.discord.bungeecord.commands.BungeeUnlinkCommand;
 import fr.bebedlastreat.discord.bungeecord.implementations.BungeeAsyncRunner;
+import fr.bebedlastreat.discord.bungeecord.implementations.BungeeConsoleExecutor;
 import fr.bebedlastreat.discord.bungeecord.implementations.BungeeOnlineCheck;
 import fr.bebedlastreat.discord.bungeecord.listeners.BungeeJoinListener;
 import fr.bebedlastreat.discord.common.charts.*;
@@ -83,7 +84,7 @@ public class DiscordSyncBungee extends Plugin {
         ProxyServer.getInstance().getScheduler().runAsync(this, () -> {
             DiscordLogger.log(Level.INFO, "Configurating the bot...");
             try {
-                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new BungeeOnlineCheck(), new BungeeAsyncRunner(), ServerType.BUNGEECORD);
+                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new BungeeOnlineCheck(), new BungeeAsyncRunner(), new BungeeConsoleExecutor(), ServerType.BUNGEECORD, config.getString("reward-command"));
 
                 PluginManager pm = ProxyServer.getInstance().getPluginManager();
                 pm.registerCommand(this, new BungeeLinkCommand(common));

@@ -19,6 +19,7 @@ import fr.bebedlastreat.discord.velocity.commands.VelocityLinkCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityStopbotCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityUnlinkCommand;
 import fr.bebedlastreat.discord.velocity.implementations.VelocityAsyncRunner;
+import fr.bebedlastreat.discord.velocity.implementations.VelocityConsoleExecutor;
 import fr.bebedlastreat.discord.velocity.implementations.VelocityOnlineCheck;
 import fr.bebedlastreat.discord.velocity.listeners.VelocityJoinListener;
 import fr.bebedlastreat.discord.velocity.squishyyaml.ConfigurationSection;
@@ -39,7 +40,7 @@ import java.util.logging.Level;
 @Plugin(
         id = "discordsyncvelocity",
         name = "DiscordSyncVelocity",
-        version = "${project.version}",
+        version = "1.1-833423a",
         authors = "BebeDlaStreat",
         description = "Allow user to link their discord to their minecraft account"
 )
@@ -108,7 +109,7 @@ public class DiscordSyncVelocity {
         server.getScheduler().buildTask(this, () -> {
             DiscordLogger.log(Level.INFO, "Configurating the bot...");
             try {
-                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new VelocityOnlineCheck(), new VelocityAsyncRunner(), ServerType.VELOCITY);
+                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new VelocityOnlineCheck(), new VelocityAsyncRunner(), new VelocityConsoleExecutor(), ServerType.VELOCITY, config.getString("reward-command"));
 
                 EventManager eventManager = server.getEventManager();
                 CommandManager commandManager = server.getCommandManager();

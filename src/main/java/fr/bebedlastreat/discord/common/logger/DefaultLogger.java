@@ -5,7 +5,12 @@ import java.util.logging.Logger;
 
 public class DefaultLogger implements IDiscordLogger{
 
-    private final Logger logger = Logger.getLogger("DiscordRankSync");
+    private final Logger logger;
+
+    public DefaultLogger(Logger logger) {
+        this.logger = logger;
+    }
+
     @Override
     public void log(Level level, String message) {
         logger.log(level, "[DiscordRankSync] " + message);

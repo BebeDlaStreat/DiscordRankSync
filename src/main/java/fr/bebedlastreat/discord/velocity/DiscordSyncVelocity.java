@@ -10,7 +10,6 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fr.bebedlastreat.discord.common.DiscordCommon;
-import fr.bebedlastreat.discord.common.logger.IDiscordLogger;
 import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.enums.ServerType;
@@ -108,8 +107,8 @@ public class DiscordSyncVelocity {
             messages.put(key, messagesSection.getString(key));
         }
 
+        DiscordCommon.setLogger(new VelocityLogger(logger));
         server.getScheduler().buildTask(this, () -> {
-            DiscordCommon.setLogger(new VelocityLogger());
             DiscordCommon.getLogger().log(Level.INFO, "Configurating the bot...");
             try {
                 common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new VelocityOnlineCheck(), new VelocityAsyncRunner(), new VelocityConsoleExecutor(), ServerType.VELOCITY, config.getString("reward-command"), config.getString("boost-reward"), config.getString("date-format"));

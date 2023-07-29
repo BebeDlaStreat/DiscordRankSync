@@ -14,7 +14,6 @@ import fr.bebedlastreat.discord.common.listeners.JoinListener;
 import fr.bebedlastreat.discord.common.listeners.SlashCommandListener;
 import fr.bebedlastreat.discord.common.logger.DefaultLogger;
 import fr.bebedlastreat.discord.common.logger.IDiscordLogger;
-import fr.bebedlastreat.discord.common.logger.VelocityLogger;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.common.objects.WaitingLink;
 import fr.bebedlastreat.discord.common.sql.SqlCredentials;
@@ -37,6 +36,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Data
 public class DiscordCommon {
@@ -74,7 +74,7 @@ public class DiscordCommon {
     private SqlHandler sqlHandler;
     @Getter
     @Setter
-    private static IDiscordLogger logger = new DefaultLogger();
+    private static IDiscordLogger logger = new DefaultLogger(Logger.getLogger("DiscordRankSync"));
 
     public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, IAsyncRunner asyncRunner, IConsoleExecutor consoleExecutor, ServerType serverType, String rewardCommand, String boostReward, String dataFormat) throws InterruptedException {
         this.token = token;

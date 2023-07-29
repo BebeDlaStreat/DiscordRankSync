@@ -11,7 +11,7 @@ import fr.bebedlastreat.discord.bungeecord.listeners.BungeeJoinListener;
 import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.DiscordCommon;
-import fr.bebedlastreat.discord.common.logger.IDiscordLogger;
+import fr.bebedlastreat.discord.common.logger.DefaultLogger;
 import fr.bebedlastreat.discord.common.enums.ServerType;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import lombok.Getter;
@@ -82,6 +82,7 @@ public class DiscordSyncBungee extends Plugin {
             messages.put(key, messagesSection.getString(key));
         }
 
+        DiscordCommon.setLogger(new DefaultLogger(getLogger()));
         ProxyServer.getInstance().getScheduler().runAsync(this, () -> {
             DiscordCommon.getLogger().log(Level.INFO, "Configurating the bot...");
             try {

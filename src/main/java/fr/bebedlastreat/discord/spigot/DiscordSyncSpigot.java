@@ -3,7 +3,7 @@ package fr.bebedlastreat.discord.spigot;
 import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.DiscordCommon;
-import fr.bebedlastreat.discord.common.logger.IDiscordLogger;
+import fr.bebedlastreat.discord.common.logger.DefaultLogger;
 import fr.bebedlastreat.discord.common.enums.ServerType;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.spigot.commands.SpigotClaimBoostCommand;
@@ -73,6 +73,7 @@ public class DiscordSyncSpigot extends JavaPlugin {
             messages.put(key, messagesSection.getString(key));
         }
 
+        DiscordCommon.setLogger(new DefaultLogger(getLogger()));
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             DiscordCommon.getLogger().log(Level.INFO, "Configurating the bot...");
             try {

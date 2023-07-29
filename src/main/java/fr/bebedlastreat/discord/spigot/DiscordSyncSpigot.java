@@ -86,6 +86,7 @@ public class DiscordSyncSpigot extends JavaPlugin {
                 pm.registerEvents(new SpigotJoinListener(common), this);
 
                 metrics = new Metrics(this, DiscordCommon.METRICS_ID);
+                metrics.addCustomChart(new AllTimeLinkCountChart());
                 metrics.addCustomChart(new DiscordCountChart());
                 metrics.addCustomChart(new DiscordOnlineChart());
                 metrics.addCustomChart(new LinkCountChart());

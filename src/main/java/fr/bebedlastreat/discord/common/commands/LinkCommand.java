@@ -45,6 +45,7 @@ public class LinkCommand implements ICommonCommand {
                         common.getWaitingLinks().remove(s);
                         if (common.getDatabaseFetch().firstLink(player.getUniqueId())) {
                             common.getDatabaseFetch().insertFirstLink(player.getUniqueId());
+                            common.setAllTimeLinkCount(common.getAllTimeLinkCount() + 1);
                             if (!common.getRewardCommand().isEmpty()) {
                                 common.getConsoleExecutor().execute(common.getRewardCommand().replace("{player}", player.getName()));
                             }

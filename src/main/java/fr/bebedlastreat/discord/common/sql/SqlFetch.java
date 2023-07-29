@@ -139,6 +139,21 @@ public class SqlFetch implements IDatabaseFetch {
     }
 
     @Override
+    public int allTimeCount() {
+        return (Integer) sql.query("SELECT COUNT(*) FROM " + sql.getAllTimeTable(), rs -> {
+            int result = 0;
+            try {
+                if (rs.next()) {
+                    result = rs.getInt("COUNT(*)");
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return result;
+        });
+    }
+
+    @Override
     public void insertBoost(UUID uuid, long time) {
         sql.update("INSERT INTO " + sql.getBoostTable() + " (uuid, finish_time) VALUES (?, ?)", uuid.toString(), time);
     }

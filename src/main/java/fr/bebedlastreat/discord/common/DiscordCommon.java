@@ -62,6 +62,7 @@ public class DiscordCommon {
     private final JoinListener joinListener;
     private final ServerType serverType;
     private int linkCount = 0;
+    private int allTimeLinkCount = 0;
     private final String rewardCommand;
     private final String boostReward;
     private final SimpleDateFormat sdf;
@@ -147,6 +148,7 @@ public class DiscordCommon {
             rank.setRole(role);
         }
         linkCount = databaseFetch.count();
+        allTimeLinkCount = databaseFetch.allTimeCount();
     }
 
     public void addRole(String discordId, DiscordRank rank) {

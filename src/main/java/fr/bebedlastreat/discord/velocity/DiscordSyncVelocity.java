@@ -128,6 +128,7 @@ public class DiscordSyncVelocity {
                 eventManager.register(this, new VelocityJoinListener(common));
 
                 metrics = metricsFactory.make(this, DiscordCommon.METRICS_ID);
+                metrics.addCustomChart(new AllTimeLinkCountChart());
                 metrics.addCustomChart(new DiscordCountChart());
                 metrics.addCustomChart(new DiscordOnlineChart());
                 metrics.addCustomChart(new LinkCountChart());

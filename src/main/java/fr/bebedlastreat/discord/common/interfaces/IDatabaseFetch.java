@@ -30,6 +30,8 @@ public interface IDatabaseFetch {
 
     int count();
 
+    int allTimeCount();
+
     void insertBoost(UUID uuid, long time);
 
     void deleteBoost(UUID uuid);

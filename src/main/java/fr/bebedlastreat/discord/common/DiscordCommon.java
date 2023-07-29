@@ -12,6 +12,9 @@ import fr.bebedlastreat.discord.common.interfaces.IDatabaseFetch;
 import fr.bebedlastreat.discord.common.interfaces.IOnlineCheck;
 import fr.bebedlastreat.discord.common.listeners.JoinListener;
 import fr.bebedlastreat.discord.common.listeners.SlashCommandListener;
+import fr.bebedlastreat.discord.common.logger.DefaultLogger;
+import fr.bebedlastreat.discord.common.logger.IDiscordLogger;
+import fr.bebedlastreat.discord.common.logger.VelocityLogger;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.common.objects.WaitingLink;
 import fr.bebedlastreat.discord.common.sql.SqlCredentials;
@@ -19,6 +22,7 @@ import fr.bebedlastreat.discord.common.sql.SqlFetch;
 import fr.bebedlastreat.discord.common.sql.SqlHandler;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
@@ -68,6 +72,9 @@ public class DiscordCommon {
     private final SimpleDateFormat sdf;
 
     private SqlHandler sqlHandler;
+    @Getter
+    @Setter
+    private static IDiscordLogger logger = new DefaultLogger();
 
     public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, IAsyncRunner asyncRunner, IConsoleExecutor consoleExecutor, ServerType serverType, String rewardCommand, String boostReward, String dataFormat) throws InterruptedException {
         this.token = token;
@@ -118,31 +125,31 @@ public class DiscordCommon {
                 .addEventListeners(new SlashCommandListener(this))
                 .build();
         jda.upsertCommand("ping", messages.get("ping-command"))
-                .queue(command -> DiscordLogger.log(Level.INFO, command.getName() + " command added"));
+                .queue(command -> logger.log(Level.INFO, command.getName() + " command added"));
 
         jda.upsertCommand("link", messages.get("link-command"))
                 .addOption(OptionType.STRING, messages.get("name"), messages.get("link-command-name"), true)
-                .queue(command -> DiscordLogger.log(Level.INFO, command.getName() + " command added"));
+                .queue(command -> logger.log(Level.INFO, command.getName() + " command added"));
 
         jda.upsertCommand("unlink", messages.get("unlink-command"))
-                .queue(command -> DiscordLogger.log(Level.INFO, command.getName() + " command added"));
+                .queue(command -> logger.log(Level.INFO, command.getName() + " command added"));
 
         jda.upsertCommand("minecraft", messages.get("minecraft-command"))
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
                 .addOption(OptionType.USER, messages.get("name"), messages.get("minecraft-command-name"), true)
-                .queue(command -> DiscordLogger.log(Level.INFO, command.getName() + " command added"));
+                .queue(command -> logger.log(Level.INFO, command.getName() + " command added"));
 
         jda.upsertCommand("discord", messages.get("discord-command"))
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
                 .addOption(OptionType.STRING, messages.get("name"), messages.get("discord-command-name"), true)
-                .queue(command -> DiscordLogger.log(Level.INFO, command.getName() + " command added"));
+                .queue(command -> logger.log(Level.INFO, command.getName() + " command added"));
         jda.awaitReady();
         guild = jda.getGuildById(guildId);
 
         for (DiscordRank rank : ranks) {
             Role role = guild.getRoleById(rank.getDiscordId());
             if (role == null) {
-                DiscordLogger.log(Level.WARNING, "Rank " + rank.getDiscordId() + " is null");
+                logger.log(Level.WARNING, "Rank " + rank.getDiscordId() + " is null");
                 continue;
             }
             rank.setRole(role);
@@ -160,7 +167,7 @@ public class DiscordCommon {
             guild.addRoleToMember(member, rank.getRole()).queue();
         } catch (InsufficientPermissionException | HierarchyException ex) {
             if (ex instanceof InsufficientPermissionException) {
-                DiscordLogger.log(Level.WARNING, "the bot has not the permission to manage roles");
+                logger.log(Level.WARNING, "the bot has not the permission to manage roles");
             }
         }
     }
@@ -174,7 +181,7 @@ public class DiscordCommon {
             guild.removeRoleFromMember(member, rank.getRole()).queue();
         } catch (InsufficientPermissionException | HierarchyException ex) {
             if (ex instanceof InsufficientPermissionException) {
-                DiscordLogger.log(Level.WARNING, "the bot has not the permission to manage roles");
+                logger.log(Level.WARNING, "the bot has not the permission to manage roles");
             }
         }
     }
@@ -188,9 +195,9 @@ public class DiscordCommon {
             member.modifyNickname(name).queue();
         } catch (InsufficientPermissionException | HierarchyException ex) {
             if (ex instanceof InsufficientPermissionException) {
-                DiscordLogger.log(Level.WARNING, "the bot has not the permission to rename a user");
+                logger.log(Level.WARNING, "the bot has not the permission to rename a user");
             } else {
-                DiscordLogger.log(Level.WARNING, "the bot can't rename " + member.getUser().getName());
+                logger.log(Level.WARNING, "the bot can't rename " + member.getUser().getName());
             }
         }
     }

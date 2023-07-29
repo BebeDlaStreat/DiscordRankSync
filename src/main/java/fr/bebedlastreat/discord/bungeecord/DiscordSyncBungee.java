@@ -11,7 +11,7 @@ import fr.bebedlastreat.discord.bungeecord.listeners.BungeeJoinListener;
 import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.DiscordCommon;
-import fr.bebedlastreat.discord.common.DiscordLogger;
+import fr.bebedlastreat.discord.common.logger.IDiscordLogger;
 import fr.bebedlastreat.discord.common.enums.ServerType;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import lombok.Getter;
@@ -83,7 +83,7 @@ public class DiscordSyncBungee extends Plugin {
         }
 
         ProxyServer.getInstance().getScheduler().runAsync(this, () -> {
-            DiscordLogger.log(Level.INFO, "Configurating the bot...");
+            DiscordCommon.getLogger().log(Level.INFO, "Configurating the bot...");
             try {
                 common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new BungeeOnlineCheck(), new BungeeAsyncRunner(), new BungeeConsoleExecutor(), ServerType.BUNGEECORD, config.getString("reward-command"), config.getString("boost-reward"), config.getString("date-format"));
 
@@ -103,10 +103,10 @@ public class DiscordSyncBungee extends Plugin {
                 metrics.addCustomChart(new RenameChart());
                 metrics.addCustomChart(new ServerTypeChart());
             } catch (InterruptedException e) {
-                DiscordLogger.log(Level.SEVERE, "Failed to enable discord bot");
+                DiscordCommon.getLogger().log(Level.SEVERE, "Failed to enable discord bot");
                 e.printStackTrace();
             } finally {
-                DiscordLogger.log(Level.INFO, "Discord bot successfully enabled");
+                DiscordCommon.getLogger().log(Level.INFO, "Discord bot successfully enabled");
             }
         });
     }

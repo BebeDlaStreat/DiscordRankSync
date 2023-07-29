@@ -10,10 +10,11 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fr.bebedlastreat.discord.common.DiscordCommon;
-import fr.bebedlastreat.discord.common.DiscordLogger;
+import fr.bebedlastreat.discord.common.logger.IDiscordLogger;
 import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.enums.ServerType;
+import fr.bebedlastreat.discord.common.logger.VelocityLogger;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.velocity.commands.VelocityClaimBoostCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityLinkCommand;
@@ -108,7 +109,8 @@ public class DiscordSyncVelocity {
         }
 
         server.getScheduler().buildTask(this, () -> {
-            DiscordLogger.log(Level.INFO, "Configurating the bot...");
+            DiscordCommon.setLogger(new VelocityLogger());
+            DiscordCommon.getLogger().log(Level.INFO, "Configurating the bot...");
             try {
                 common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new VelocityOnlineCheck(), new VelocityAsyncRunner(), new VelocityConsoleExecutor(), ServerType.VELOCITY, config.getString("reward-command"), config.getString("boost-reward"), config.getString("date-format"));
 
@@ -136,10 +138,10 @@ public class DiscordSyncVelocity {
                 metrics.addCustomChart(new RenameChart());
                 metrics.addCustomChart(new ServerTypeChart());
             } catch (InterruptedException e) {
-                DiscordLogger.log(Level.SEVERE, "Failed to enable discord bot");
+                DiscordCommon.getLogger().log(Level.SEVERE, "Failed to enable discord bot");
                 e.printStackTrace();
             } finally {
-                DiscordLogger.log(Level.INFO, "Discord bot successfully enabled");
+                DiscordCommon.getLogger().log(Level.INFO, "Discord bot successfully enabled");
             }
         }).schedule();
     }

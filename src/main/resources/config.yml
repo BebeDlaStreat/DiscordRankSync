@@ -18,9 +18,9 @@ activity:
 
 database: "MariaDB" # Currently only MariaDB is supported but I will include later MongoDB support if it is requested (sql is better for use of this plugin)
 
-reward-command: "" # command executed when a player links his account for the first time (user {player} as placeholder for player name)
+reward-command: [] # command executed when a player links his account for the first time (user {player} as placeholder for player name)
 
-boost-reward: "" # command to execute when a player with boost rank execute /claimboost, can be executed every months
+boost-reward: [] # command to execute when a player with boost rank execute /claimboost, can be executed every months
 
 date-format: "MM/dd/yy hh:mm aa" # see https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
 

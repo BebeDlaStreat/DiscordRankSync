@@ -115,7 +115,7 @@ public class DiscordSyncVelocity {
             try {
                 common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages,
                         new VelocityOnlineCheck(), new VelocityAsyncRunner(), new VelocityConsoleExecutor(),
-                        ServerType.VELOCITY, config.getString("reward-command"), config.getString("boost-reward"), config.getString("date-format"),
+                        ServerType.VELOCITY, config.getListString("reward-command"), config.getListString("boost-reward"), config.getString("date-format"),
                         new DiscordActivity(config.getBoolean("activity.enable", false), Activity.ActivityType.valueOf(config.getString("activity.type", "PLAYING")), config.getString("activity.message", "DiscordRankSync")));
 
                 EventManager eventManager = server.getEventManager();

@@ -81,7 +81,7 @@ public class DiscordSyncSpigot extends JavaPlugin {
             try {
                 common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages,
                         new SpigotOnlineCheck(), new SpigotAsyncRunner(), new SpigotConsoleExecutor(),
-                        ServerType.SPIGOT, getConfig().getString("reward-command"), getConfig().getString("boost-reward"), getConfig().getString("date-format"),
+                        ServerType.SPIGOT, getConfig().getStringList("reward-command"), getConfig().getStringList("boost-reward"), getConfig().getString("date-format"),
                         new DiscordActivity(getConfig().getBoolean("activity.enable", false), Activity.ActivityType.valueOf(getConfig().getString("activity.type", "PLAYING")), getConfig().getString("activity.message", "DiscordRankSync")));
 
                 getCommand("link").setExecutor(new SpigotLinkCommand(common));

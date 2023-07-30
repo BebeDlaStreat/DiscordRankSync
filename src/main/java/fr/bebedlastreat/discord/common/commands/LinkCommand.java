@@ -47,7 +47,9 @@ public class LinkCommand implements ICommonCommand {
                             common.getDatabaseFetch().insertFirstLink(player.getUniqueId());
                             common.setAllTimeLinkCount(common.getAllTimeLinkCount() + 1);
                             if (!common.getRewardCommand().isEmpty()) {
-                                common.getConsoleExecutor().execute(common.getRewardCommand().replace("{player}", player.getName()));
+                                for (String command : common.getRewardCommand()) {
+                                    common.getConsoleExecutor().execute(command.replace("{player}", player.getName()));
+                                }
                             }
                         }
                     } else {

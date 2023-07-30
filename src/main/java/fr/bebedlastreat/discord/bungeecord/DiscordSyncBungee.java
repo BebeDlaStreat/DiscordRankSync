@@ -90,7 +90,7 @@ public class DiscordSyncBungee extends Plugin {
             try {
                 common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages,
                         new BungeeOnlineCheck(), new BungeeAsyncRunner(), new BungeeConsoleExecutor(),
-                        ServerType.BUNGEECORD, config.getString("reward-command"), config.getString("boost-reward"), config.getString("date-format"),
+                        ServerType.BUNGEECORD, config.getStringList("reward-command"), config.getStringList("boost-reward"), config.getString("date-format"),
                         new DiscordActivity(config.getBoolean("activity.enable", false), Activity.ActivityType.valueOf(config.getString("activity.type", "PLAYING")), config.getString("activity.message", "DiscordRankSync")));
 
                 PluginManager pm = ProxyServer.getInstance().getPluginManager();

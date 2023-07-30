@@ -69,8 +69,8 @@ public class DiscordCommon {
     private final ServerType serverType;
     private int linkCount = 0;
     private int allTimeLinkCount = 0;
-    private final String rewardCommand;
-    private final String boostReward;
+    private final List<String> rewardCommand;
+    private final List<String> boostReward;
     private final SimpleDateFormat sdf;
     private final DiscordActivity activity;
 
@@ -79,7 +79,7 @@ public class DiscordCommon {
     @Setter
     private static IDiscordLogger logger = new DefaultLogger(Logger.getLogger("DiscordRankSync"));
 
-    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, IAsyncRunner asyncRunner, IConsoleExecutor consoleExecutor, ServerType serverType, String rewardCommand, String boostReward, String dataFormat, DiscordActivity activity) throws InterruptedException {
+    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, IAsyncRunner asyncRunner, IConsoleExecutor consoleExecutor, ServerType serverType, List<String> rewardCommand, List<String> boostReward, String dataFormat, DiscordActivity activity) throws InterruptedException {
         this.token = token;
         this.guildId = guildId;
         this.rename = rename;

@@ -14,6 +14,7 @@ import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.enums.ServerType;
 import fr.bebedlastreat.discord.common.logger.VelocityLogger;
+import fr.bebedlastreat.discord.common.objects.DiscordActivity;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.velocity.commands.VelocityClaimBoostCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityLinkCommand;
@@ -27,6 +28,7 @@ import fr.bebedlastreat.discord.velocity.squishyyaml.ConfigurationSection;
 import fr.bebedlastreat.discord.velocity.squishyyaml.YamlConfiguration;
 import lombok.Getter;
 import lombok.Setter;
+import net.dv8tion.jda.api.entities.Activity;
 import org.bstats.velocity.Metrics;
 import org.slf4j.Logger;
 
@@ -111,7 +113,10 @@ public class DiscordSyncVelocity {
         server.getScheduler().buildTask(this, () -> {
             DiscordCommon.getLogger().log(Level.INFO, "Configurating the bot...");
             try {
-                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new VelocityOnlineCheck(), new VelocityAsyncRunner(), new VelocityConsoleExecutor(), ServerType.VELOCITY, config.getString("reward-command"), config.getString("boost-reward"), config.getString("date-format"));
+                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages,
+                        new VelocityOnlineCheck(), new VelocityAsyncRunner(), new VelocityConsoleExecutor(),
+                        ServerType.VELOCITY, config.getString("reward-command"), config.getString("boost-reward"), config.getString("date-format"),
+                        new DiscordActivity(config.getBoolean("activity.enable", false), Activity.ActivityType.valueOf(config.getString("activity.type", "PLAYING")), config.getString("activity.message", "DiscordRankSync")));
 
                 EventManager eventManager = server.getEventManager();
                 CommandManager commandManager = server.getCommandManager();

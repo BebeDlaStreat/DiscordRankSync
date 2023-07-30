@@ -13,9 +13,11 @@ import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.logger.DefaultLogger;
 import fr.bebedlastreat.discord.common.enums.ServerType;
+import fr.bebedlastreat.discord.common.objects.DiscordActivity;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import lombok.Getter;
 import lombok.Setter;
+import net.dv8tion.jda.api.entities.Activity;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
@@ -86,7 +88,10 @@ public class DiscordSyncBungee extends Plugin {
         ProxyServer.getInstance().getScheduler().runAsync(this, () -> {
             DiscordCommon.getLogger().log(Level.INFO, "Configurating the bot...");
             try {
-                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages, new BungeeOnlineCheck(), new BungeeAsyncRunner(), new BungeeConsoleExecutor(), ServerType.BUNGEECORD, config.getString("reward-command"), config.getString("boost-reward"), config.getString("date-format"));
+                common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages,
+                        new BungeeOnlineCheck(), new BungeeAsyncRunner(), new BungeeConsoleExecutor(),
+                        ServerType.BUNGEECORD, config.getString("reward-command"), config.getString("boost-reward"), config.getString("date-format"),
+                        new DiscordActivity(config.getBoolean("activity.enable", false), Activity.ActivityType.valueOf(config.getString("activity.type", "PLAYING")), config.getString("activity.message", "DiscordRankSync")));
 
                 PluginManager pm = ProxyServer.getInstance().getPluginManager();
                 pm.registerCommand(this, new BungeeLinkCommand(common));

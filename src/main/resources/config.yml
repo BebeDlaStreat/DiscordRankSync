@@ -10,6 +10,12 @@ ranks:
     id: "0000000000000000000" # the discord id of the role, need developer mod enabled to get it
     permission: "group.default" # the permission the player should have on minecraft
 
+activity:
+  enable: false
+  type: "PLAYING" # PLAYING, STREAMING, LISTENING, WATCHING, COMPETING
+  message: "DiscordRankSync"
+
+
 database: "MariaDB" # Currently only MariaDB is supported but I will include later MongoDB support if it is requested (sql is better for use of this plugin)
 
 reward-command: "" # command executed when a player links his account for the first time (user {player} as placeholder for player name)

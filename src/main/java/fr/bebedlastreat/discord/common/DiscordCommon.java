@@ -14,6 +14,7 @@ import fr.bebedlastreat.discord.common.listeners.JoinListener;
 import fr.bebedlastreat.discord.common.listeners.SlashCommandListener;
 import fr.bebedlastreat.discord.common.logger.DefaultLogger;
 import fr.bebedlastreat.discord.common.logger.IDiscordLogger;
+import fr.bebedlastreat.discord.common.objects.DiscordActivity;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.common.objects.WaitingLink;
 import fr.bebedlastreat.discord.common.sql.SqlCredentials;
@@ -25,6 +26,7 @@ import lombok.Setter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -70,13 +72,14 @@ public class DiscordCommon {
     private final String rewardCommand;
     private final String boostReward;
     private final SimpleDateFormat sdf;
+    private final DiscordActivity activity;
 
     private SqlHandler sqlHandler;
     @Getter
     @Setter
     private static IDiscordLogger logger = new DefaultLogger(Logger.getLogger("DiscordRankSync"));
 
-    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, IAsyncRunner asyncRunner, IConsoleExecutor consoleExecutor, ServerType serverType, String rewardCommand, String boostReward, String dataFormat) throws InterruptedException {
+    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, IAsyncRunner asyncRunner, IConsoleExecutor consoleExecutor, ServerType serverType, String rewardCommand, String boostReward, String dataFormat, DiscordActivity activity) throws InterruptedException {
         this.token = token;
         this.guildId = guildId;
         this.rename = rename;
@@ -88,6 +91,7 @@ public class DiscordCommon {
         this.rewardCommand = rewardCommand;
         this.boostReward = boostReward;
         this.sdf = new SimpleDateFormat(dataFormat);
+        this.activity = activity;
         instance = this;
         this.databaseType = databaseType;
         this.credentials = credentials;
@@ -124,6 +128,9 @@ public class DiscordCommon {
                 .setAutoReconnect(true)
                 .addEventListeners(new SlashCommandListener(this))
                 .build();
+        if (activity.isEnable()) {
+            jda.getPresence().setActivity(Activity.of(activity.getActivityType(), activity.getMessage()));
+        }
         jda.upsertCommand("ping", messages.get("ping-command"))
                 .queue(command -> logger.log(Level.INFO, command.getName() + " command added"));
 

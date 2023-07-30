@@ -20,6 +20,7 @@ import fr.bebedlastreat.discord.common.objects.WaitingLink;
 import fr.bebedlastreat.discord.common.sql.SqlCredentials;
 import fr.bebedlastreat.discord.common.sql.SqlFetch;
 import fr.bebedlastreat.discord.common.sql.SqlHandler;
+import fr.bebedlastreat.discord.common.utils.ColorUtils;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -101,6 +102,10 @@ public class DiscordCommon {
         this.claimBoostCommand = new ClaimBoostCommand(this);
         this.stopbotCommand = new StopbotCommand(this);
         this.joinListener = new JoinListener(this);
+
+        for (String key : messages.keySet()) {
+            messages.put(key, ColorUtils.translate(messages.get(key)));
+        }
 
         switch (databaseType) {
             case SQL: {

@@ -33,6 +33,7 @@ sql:
   table: "discord_sync" # the table of the table used to store, automatically created
   properties: "?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8"
 
+# you can use & as color character instead of §, to write HEX color you should do &#RRGGBB
 messages:
   name: "name" # should not contain a space
   ping-command: "Get bot latency"

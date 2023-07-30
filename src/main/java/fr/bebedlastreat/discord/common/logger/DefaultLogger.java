@@ -13,6 +13,6 @@ public class DefaultLogger implements IDiscordLogger{
 
     @Override
     public void log(Level level, String message) {
-        logger.log(level, "[DiscordRankSync] " + message);
+        logger.log(level, message);
     }
 }

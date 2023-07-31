@@ -18,6 +18,7 @@ import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.Activity;
+import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
@@ -25,6 +26,7 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import org.bstats.bungeecord.Metrics;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,10 +48,20 @@ public class DiscordSyncBungee extends Plugin {
     private Configuration config;
     private Metrics metrics;
 
+    private BungeeAudiences adventure;
+
+    public @NonNull BungeeAudiences adventure() {
+        if(this.adventure == null) {
+            throw new IllegalStateException("Cannot retrieve audience provider while plugin is not enabled");
+        }
+        return this.adventure;
+    }
+
     @Override
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
+        this.adventure = BungeeAudiences.create(this);
 
         String token = getConfig().getString("bot-token");
         String guildId = getConfig().getString("guild-id");
@@ -115,6 +127,14 @@ public class DiscordSyncBungee extends Plugin {
                 DiscordCommon.getLogger().log(Level.INFO, "Discord bot successfully enabled");
             }
         });
+    }
+
+    @Override
+    public void onDisable() {
+        if(this.adventure != null) {
+            this.adventure.close();
+            this.adventure = null;
+        }
     }
 
     private void saveDefaultConfig() {

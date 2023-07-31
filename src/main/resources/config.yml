@@ -33,7 +33,7 @@ sql:
   table: "discord_sync" # the table of the table used to store, automatically created
   properties: "?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8"
 
-# you can use & as color character instead of §, to write HEX color you should do &#RRGGBB
+# warning: no legacy color support, you must use minimessage format: https://docs.advntr.dev/minimessage/format.html)
 messages:
   name: "name" # should not contain a space
   ping-command: "Get bot latency"
@@ -58,17 +58,17 @@ messages:
   success: "Success"
   success-desc: "Your Discord account has been successfully unlinked from your Minecraft account"
 
-  link-usage: "§cUsage: /link <code>"
-  you-already-link: "§cYour Minecraft account is already linked to a Discord account."
-  link-success: "§aYour Minecraft account has been successfully linked to your Discord account!\n§aTo receive your Discord roles, simply log out and log back in."
-  invalid-code: "§cInvalid code!"
-  no-link: "§cYou haven't attempted to link your Minecraft account to your Discord account in the last 5 minutes."
-  not-linked: "§cYour Minecraft account is not linked to a Discord account."
-  unlink-success: "§aYour Minecraft account has been successfully unlinked from your Discord account!"
+  link-usage: "<gradient:#fb0000:#0028fd>Usage: /link <code></gradient>"
+  you-already-link: "<red>Your Minecraft account is already linked to a Discord account.</red>"
+  link-success: "<green>Your Minecraft account has been successfully linked to your Discord account!\nTo receive your Discord roles, simply log out and log back in.</green>"
+  invalid-code: "<rainbow>Invalid code!</rainbow>"
+  no-link: "<red>You haven't attempted to link your Minecraft account to your Discord account in the last 5 minutes.</red>"
+  not-linked: "<red>Your Minecraft account is not linked to a Discord account.</red>"
+  unlink-success: "<green>Your Minecraft account has been successfully unlinked from your Discord account!</green>"
   stop-bot: "You just stopped the bot!"
 
   join-message: "" # a message sent to unlinked players on join, let it empty for no join message
 
-  not-boosting: "§cYou need to boost our discord server to claim this reward"
-  boost-countdown: "§cYou already claim your reward this month, please wait until {date}"
-  boost-claim: "§aYou successfully claimed your boost reward"
+  not-boosting: "<red>You need to boost our discord server to claim this reward</red>"
+  boost-countdown: "<red>You already claim your reward this month, please wait until {date}</red>"
+  boost-claim: "<green>You successfully claimed your boost reward</green>"

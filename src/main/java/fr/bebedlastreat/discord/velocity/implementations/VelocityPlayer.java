@@ -2,13 +2,14 @@ package fr.bebedlastreat.discord.velocity.implementations;
 
 import com.velocitypowered.api.proxy.Player;
 import fr.bebedlastreat.discord.common.interfaces.ICommonPlayer;
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.util.UUID;
 
 public class VelocityPlayer implements ICommonPlayer<Player> {
 
     private final Player player;
+    private static final MiniMessage mm = MiniMessage.miniMessage();
 
     public VelocityPlayer(Player player) {
         this.player = player;
@@ -16,7 +17,7 @@ public class VelocityPlayer implements ICommonPlayer<Player> {
 
     @Override
     public void sendMessage(String message) {
-        player.sendMessage(Component.text(message));
+        player.sendMessage(mm.deserialize(message));
     }
 
     @Override

@@ -41,8 +41,8 @@ import java.util.Map;
 import java.util.logging.Level;
 
 @Plugin(
-        id = "discordsyncvelocity",
-        name = "DiscordSyncVelocity",
+        id = "discordranksync",
+        name = "DiscordRankSync",
         version = "${project.version}",
         authors = "BebeDlaStreat",
         description = "Allow user to link their discord to their minecraft account"

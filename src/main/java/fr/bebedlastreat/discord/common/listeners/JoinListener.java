@@ -14,7 +14,7 @@ public class JoinListener implements ICommonListener {
     }
 
     public void execute(ICommonPlayer<?> player) {
-        common.getAsyncRunner().runAsync(() -> {
+        common.getRunner().runAsync(() -> {
             String discord = common.getDatabaseFetch().discord(player.getUniqueId());
             if (discord != null && discord.length() > 0) {
                 for (DiscordRank rank : common.getRanks()) {
@@ -28,7 +28,13 @@ public class JoinListener implements ICommonListener {
             } else {
                 String joinMessage = common.getMessages().getOrDefault("join-message", "");
                 if (!joinMessage.isEmpty()) {
-                    player.sendMessage(joinMessage);
+                    if (common.getJoinMessageDelay() == 0) {
+                        player.sendMessage(joinMessage);
+                    } else {
+                        common.getRunner().runLater(() -> {
+                            player.sendMessage(joinMessage);
+                        }, common.getJoinMessageDelay());
+                    }
                 }
             }
         });

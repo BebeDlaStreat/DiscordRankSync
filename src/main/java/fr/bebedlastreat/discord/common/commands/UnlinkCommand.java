@@ -16,7 +16,7 @@ public class UnlinkCommand implements ICommonCommand {
 
     @Override
     public void execute(ICommonPlayer<?> player, String[] args) {
-        common.getAsyncRunner().runAsync(() -> {
+        common.getRunner().runAsync(() -> {
             if (!common.getDatabaseFetch().exist(player.getUniqueId())) {
                 player.sendMessage(common.getMessages().get("not-linked"));
                 return;

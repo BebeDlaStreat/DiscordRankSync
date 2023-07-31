@@ -6,7 +6,7 @@ import fr.bebedlastreat.discord.common.commands.StopbotCommand;
 import fr.bebedlastreat.discord.common.commands.UnlinkCommand;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.enums.ServerType;
-import fr.bebedlastreat.discord.common.interfaces.IAsyncRunner;
+import fr.bebedlastreat.discord.common.interfaces.ICommonRunner;
 import fr.bebedlastreat.discord.common.interfaces.IConsoleExecutor;
 import fr.bebedlastreat.discord.common.interfaces.IDatabaseFetch;
 import fr.bebedlastreat.discord.common.interfaces.IOnlineCheck;
@@ -59,7 +59,7 @@ public class DiscordCommon {
     private final IOnlineCheck onlineCheck;
     private final Map<String, WaitingLink> waitingLinks = new HashMap<>();
     private final List<DiscordRank> ranks;
-    private final IAsyncRunner asyncRunner;
+    private final ICommonRunner runner;
     private final IConsoleExecutor consoleExecutor;
     private final LinkCommand linkCommand;
     private final UnlinkCommand unlinkCommand;
@@ -73,25 +73,27 @@ public class DiscordCommon {
     private final List<String> boostReward;
     private final SimpleDateFormat sdf;
     private final DiscordActivity activity;
+    private final int joinMessageDelay;
 
     private SqlHandler sqlHandler;
     @Getter
     @Setter
     private static IDiscordLogger logger = new DefaultLogger(Logger.getLogger("DiscordRankSync"));
 
-    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, IAsyncRunner asyncRunner, IConsoleExecutor consoleExecutor, ServerType serverType, List<String> rewardCommand, List<String> boostReward, String dataFormat, DiscordActivity activity) throws InterruptedException {
+    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, ICommonRunner runner, IConsoleExecutor consoleExecutor, ServerType serverType, List<String> rewardCommand, List<String> boostReward, String dataFormat, DiscordActivity activity, int joinMessageDelay) throws InterruptedException {
         this.token = token;
         this.guildId = guildId;
         this.rename = rename;
         this.messages = messages;
         this.onlineCheck = onlineCheck;
-        this.asyncRunner = asyncRunner;
+        this.runner = runner;
         this.consoleExecutor = consoleExecutor;
         this.serverType = serverType;
         this.rewardCommand = rewardCommand;
         this.boostReward = boostReward;
         this.sdf = new SimpleDateFormat(dataFormat);
         this.activity = activity;
+        this.joinMessageDelay = joinMessageDelay;
         instance = this;
         this.databaseType = databaseType;
         this.credentials = credentials;

@@ -11,7 +11,7 @@ import fr.bebedlastreat.discord.spigot.commands.SpigotClaimBoostCommand;
 import fr.bebedlastreat.discord.spigot.commands.SpigotLinkCommand;
 import fr.bebedlastreat.discord.spigot.commands.SpigotStopbotCommand;
 import fr.bebedlastreat.discord.spigot.commands.SpigotUnlinkCommand;
-import fr.bebedlastreat.discord.spigot.implementations.SpigotAsyncRunner;
+import fr.bebedlastreat.discord.spigot.implementations.SpigotRunner;
 import fr.bebedlastreat.discord.spigot.implementations.SpigotConsoleExecutor;
 import fr.bebedlastreat.discord.spigot.implementations.SpigotOnlineCheck;
 import fr.bebedlastreat.discord.spigot.listeners.SpigotJoinListener;
@@ -92,9 +92,10 @@ public class DiscordSyncSpigot extends JavaPlugin {
             DiscordCommon.getLogger().log(Level.INFO, "Configurating the bot...");
             try {
                 common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages,
-                        new SpigotOnlineCheck(), new SpigotAsyncRunner(), new SpigotConsoleExecutor(),
+                        new SpigotOnlineCheck(), new SpigotRunner(), new SpigotConsoleExecutor(),
                         ServerType.SPIGOT, getConfig().getStringList("reward-command"), getConfig().getStringList("boost-reward"), getConfig().getString("date-format"),
-                        new DiscordActivity(getConfig().getBoolean("activity.enable", false), Activity.ActivityType.valueOf(getConfig().getString("activity.type", "PLAYING")), getConfig().getString("activity.message", "DiscordRankSync")));
+                        new DiscordActivity(getConfig().getBoolean("activity.enable", false), Activity.ActivityType.valueOf(getConfig().getString("activity.type", "PLAYING")), getConfig().getString("activity.message", "DiscordRankSync")),
+                        getConfig().getInt("join-message-delay", 0));
 
                 getCommand("link").setExecutor(new SpigotLinkCommand(common));
                 getCommand("unlink").setExecutor(new SpigotUnlinkCommand(common));

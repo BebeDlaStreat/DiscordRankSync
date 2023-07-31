@@ -23,7 +23,7 @@ public class LinkCommand implements ICommonCommand {
             return;
         }
 
-        common.getAsyncRunner().runAsync(() -> {
+        common.getRunner().runAsync(() -> {
             if (common.getDatabaseFetch().exist(player.getUniqueId())) {
                 player.sendMessage(common.getMessages().get("you-already-link"));
                 return;

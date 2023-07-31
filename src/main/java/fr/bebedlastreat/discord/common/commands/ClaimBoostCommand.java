@@ -20,7 +20,7 @@ public class ClaimBoostCommand implements ICommonCommand {
     @Override
     public void execute(ICommonPlayer<?> player, String[] args) {
         if (common.getBoostReward().isEmpty()) return;
-        common.getAsyncRunner().runAsync(() -> {
+        common.getRunner().runAsync(() -> {
             if (!common.getDatabaseFetch().exist(player.getUniqueId())) {
                 player.sendMessage(common.getMessages().get("not-linked"));
                 return;

@@ -20,7 +20,7 @@ import fr.bebedlastreat.discord.velocity.commands.VelocityClaimBoostCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityLinkCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityStopbotCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityUnlinkCommand;
-import fr.bebedlastreat.discord.velocity.implementations.VelocityAsyncRunner;
+import fr.bebedlastreat.discord.velocity.implementations.VelocityRunner;
 import fr.bebedlastreat.discord.velocity.implementations.VelocityConsoleExecutor;
 import fr.bebedlastreat.discord.velocity.implementations.VelocityOnlineCheck;
 import fr.bebedlastreat.discord.velocity.listeners.VelocityJoinListener;
@@ -114,9 +114,10 @@ public class DiscordSyncVelocity {
             DiscordCommon.getLogger().log(Level.INFO, "Configurating the bot...");
             try {
                 common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages,
-                        new VelocityOnlineCheck(), new VelocityAsyncRunner(), new VelocityConsoleExecutor(),
+                        new VelocityOnlineCheck(), new VelocityRunner(), new VelocityConsoleExecutor(),
                         ServerType.VELOCITY, config.getListString("reward-command"), config.getListString("boost-reward"), config.getString("date-format"),
-                        new DiscordActivity(config.getBoolean("activity.enable", false), Activity.ActivityType.valueOf(config.getString("activity.type", "PLAYING")), config.getString("activity.message", "DiscordRankSync")));
+                        new DiscordActivity(config.getBoolean("activity.enable", false), Activity.ActivityType.valueOf(config.getString("activity.type", "PLAYING")), config.getString("activity.message", "DiscordRankSync")),
+                        config.getInteger("join-message-delay", 0));
 
                 EventManager eventManager = server.getEventManager();
                 CommandManager commandManager = server.getCommandManager();

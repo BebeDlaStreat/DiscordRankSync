@@ -22,6 +22,8 @@ reward-command: [] # command executed when a player links his account for the fi
 
 boost-reward: [] # command to execute when a player with boost rank execute /claimboost, can be executed every months
 
+join-message-delay: 0 # delay in ticks (50ms) to send the join message, useful when you have a lobby plugin which send a welcome message
+
 date-format: "MM/dd/yy hh:mm aa" # see https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
 
 sql:

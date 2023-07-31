@@ -15,6 +15,7 @@ activity:
   type: "PLAYING" # PLAYING, STREAMING, LISTENING, WATCHING, COMPETING
   message: "DiscordRankSync"
 
+papi-delay: 30
 
 database: "MariaDB" # Currently only MariaDB is supported but I will include later MongoDB support if it is requested (sql is better for use of this plugin)
 

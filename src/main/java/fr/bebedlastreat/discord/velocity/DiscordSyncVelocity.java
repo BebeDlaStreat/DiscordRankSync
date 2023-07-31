@@ -117,7 +117,7 @@ public class DiscordSyncVelocity {
                         new VelocityOnlineCheck(), new VelocityRunner(), new VelocityConsoleExecutor(),
                         ServerType.VELOCITY, config.getListString("reward-command"), config.getListString("boost-reward"), config.getString("date-format"),
                         new DiscordActivity(config.getBoolean("activity.enable", false), Activity.ActivityType.valueOf(config.getString("activity.type", "PLAYING")), config.getString("activity.message", "DiscordRankSync")),
-                        config.getInteger("join-message-delay", 0));
+                        config.getInteger("join-message-delay", 0), config.getInteger("papi-delay", 30));
 
                 EventManager eventManager = server.getEventManager();
                 CommandManager commandManager = server.getCommandManager();

@@ -104,7 +104,7 @@ public class DiscordSyncBungee extends Plugin {
                         new BungeeOnlineCheck(), new BungeeRunner(), new BungeeConsoleExecutor(),
                         ServerType.BUNGEECORD, config.getStringList("reward-command"), config.getStringList("boost-reward"), config.getString("date-format"),
                         new DiscordActivity(config.getBoolean("activity.enable", false), Activity.ActivityType.valueOf(config.getString("activity.type", "PLAYING")),config.getString("activity.message", "DiscordRankSync")),
-                        config.getInt("join-message-delay", 0));
+                        config.getInt("join-message-delay", 0), config.getInt("papi-delay", 30));
 
                 PluginManager pm = ProxyServer.getInstance().getPluginManager();
                 pm.registerCommand(this, new BungeeLinkCommand(common));

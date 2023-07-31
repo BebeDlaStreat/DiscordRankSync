@@ -96,7 +96,7 @@ public class DiscordSyncSpigot extends JavaPlugin {
                         new SpigotOnlineCheck(), new SpigotRunner(), new SpigotConsoleExecutor(),
                         ServerType.SPIGOT, getConfig().getStringList("reward-command"), getConfig().getStringList("boost-reward"), getConfig().getString("date-format"),
                         new DiscordActivity(getConfig().getBoolean("activity.enable", false), Activity.ActivityType.valueOf(getConfig().getString("activity.type", "PLAYING")), getConfig().getString("activity.message", "DiscordRankSync")),
-                        getConfig().getInt("join-message-delay", 0));
+                        getConfig().getInt("join-message-delay", 0), getConfig().getInt("papi-delay", 30));
 
                 getCommand("link").setExecutor(new SpigotLinkCommand(common));
                 getCommand("unlink").setExecutor(new SpigotUnlinkCommand(common));

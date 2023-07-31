@@ -3,6 +3,7 @@ version: ${project.version}
 description: Allow user to link their discord to their minecraft account
 author: BebeDlaStreat
 main: fr.bebedlastreat.discord.spigot.DiscordSyncSpigot
+softdepend: [PlaceholderAPI]
 
 commands:
   link:

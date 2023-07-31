@@ -15,6 +15,7 @@ import fr.bebedlastreat.discord.spigot.implementations.SpigotRunner;
 import fr.bebedlastreat.discord.spigot.implementations.SpigotConsoleExecutor;
 import fr.bebedlastreat.discord.spigot.implementations.SpigotOnlineCheck;
 import fr.bebedlastreat.discord.spigot.listeners.SpigotJoinListener;
+import fr.bebedlastreat.discord.spigot.papi.DiscordPapi;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.Activity;
@@ -112,6 +113,10 @@ public class DiscordSyncSpigot extends JavaPlugin {
                 metrics.addCustomChart(new RankCountChart());
                 metrics.addCustomChart(new RenameChart());
                 metrics.addCustomChart(new ServerTypeChart());
+
+                if (pm.getPlugin("PlaceholderAPI") != null) {
+                    DiscordPapi.init();
+                }
             } catch (InterruptedException e) {
                 DiscordCommon.getLogger().log(Level.SEVERE, "Failed to enable discord bot");
                 e.printStackTrace();

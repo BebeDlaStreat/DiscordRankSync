@@ -216,6 +216,10 @@
                             <pattern>com.mysql</pattern>
                             <shadedPattern>fr.bebedlastreat.mysql</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>net.kyori</pattern>
+                            <shadedPattern>fr.bebedlastreat.kyori</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>

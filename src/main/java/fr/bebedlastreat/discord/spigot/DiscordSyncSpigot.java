@@ -114,9 +114,11 @@ public class DiscordSyncSpigot extends JavaPlugin {
                 metrics.addCustomChart(new RenameChart());
                 metrics.addCustomChart(new ServerTypeChart());
 
-                if (pm.getPlugin("PlaceholderAPI") != null) {
-                    DiscordPapi.init();
-                }
+                Bukkit.getScheduler().runTask(this, () -> {
+                    if (pm.getPlugin("PlaceholderAPI") != null) {
+                        DiscordPapi.init();
+                    }
+                });
             } catch (InterruptedException e) {
                 DiscordCommon.getLogger().log(Level.SEVERE, "Failed to enable discord bot");
                 e.printStackTrace();

@@ -29,6 +29,7 @@ join-message-delay: 0 # delay in ticks (50ms) to send the join message, useful w
 date-format: "MM/dd/yy hh:mm aa" # see https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
 
 # Enable it if you put the jar on your spigot servers and you have it running on your proxy. It will prevent bot start and read plugin messages from the proxy. It's useful for PlaceholderAPI.
+# Incompatible with redis bungee
 standalone: false
 
 sql:

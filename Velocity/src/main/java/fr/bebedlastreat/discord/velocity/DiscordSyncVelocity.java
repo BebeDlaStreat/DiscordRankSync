@@ -9,7 +9,9 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
 import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
@@ -29,6 +31,7 @@ import fr.bebedlastreat.discord.velocity.listeners.RedisBungeeListener;
 import fr.bebedlastreat.discord.velocity.listeners.VelocityJoinListener;
 import fr.bebedlastreat.discord.velocity.squishyyaml.ConfigurationSection;
 import fr.bebedlastreat.discord.velocity.squishyyaml.YamlConfiguration;
+import fr.bebedlastreat.discord.velocity.utils.DiscordVelocityPluginMessage;
 import lombok.Getter;
 import lombok.Setter;
 import org.bstats.velocity.Metrics;
@@ -40,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 @Plugin(
@@ -78,6 +82,8 @@ public class DiscordSyncVelocity {
     public void onEnable(ProxyInitializeEvent event) {
         instance = this;
         saveDefaultConfig();
+
+        server.getChannelRegistrar().register(MinecraftChannelIdentifier.from(DiscordCommon.PLUGIN_CHANNEL));
 
         String token = getConfig().getString("bot-token");
         String guildId = getConfig().getString("guild-id");
@@ -120,7 +126,7 @@ public class DiscordSyncVelocity {
                         new VelocityOnlineCheck(), new VelocityRunner(), new VelocityConsoleExecutor(),
                         ServerType.VELOCITY, config.getListString("reward-command"), config.getListString("boost-reward"), config.getString("date-format"),
                         new DiscordActivity(config.getBoolean("activity.enable", false), config.getString("activity.type", "PLAYING"), config.getString("activity.message", "DiscordRankSync")),
-                        config.getInteger("join-message-delay", 0), config.getInteger("papi-delay", 30));
+                        config.getInteger("join-message-delay", 0), config.getInteger("refresh-delay", 30));
 
                 EventManager eventManager = server.getEventManager();
                 CommandManager commandManager = server.getCommandManager();
@@ -155,6 +161,12 @@ public class DiscordSyncVelocity {
                 DiscordCommon.getLogger().log(Level.INFO, "RedisBungee detected, start working with...");
                 RedisBungeeManager.init();
                 server.getEventManager().register(this, new RedisBungeeListener());
+            } else {
+                server.getScheduler().buildTask(this, () -> {
+                    for (Player player : server.getAllPlayers()) {
+                        DiscordVelocityPluginMessage.sendData(player);
+                    }
+                }).repeat(common.getRefreshDelay(), TimeUnit.SECONDS).schedule();
             }
         }).schedule();
     }

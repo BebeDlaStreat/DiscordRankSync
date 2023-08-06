@@ -3,6 +3,7 @@ package fr.bebedlastreat.discord.bukkit;
 import fr.bebedlastreat.discord.bukkit.commands.SpigotUnlinkCommand;
 import fr.bebedlastreat.discord.bukkit.implementations.SpigotConsoleExecutor;
 import fr.bebedlastreat.discord.bukkit.implementations.SpigotOnlineCheck;
+import fr.bebedlastreat.discord.bukkit.listeners.DiscordPluginMessageListener;
 import fr.bebedlastreat.discord.bukkit.listeners.SpigotJoinListener;
 import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.charts.*;
@@ -98,7 +99,7 @@ public class DiscordSyncBukkit extends JavaPlugin {
                         new SpigotOnlineCheck(), new SpigotRunner(), new SpigotConsoleExecutor(),
                         ServerType.SPIGOT, getConfig().getStringList("reward-command"), getConfig().getStringList("boost-reward"), getConfig().getString("date-format"),
                         new DiscordActivity(getConfig().getBoolean("activity.enable", false), getConfig().getString("activity.type", "PLAYING"), getConfig().getString("activity.message", "DiscordRankSync")),
-                        getConfig().getInt("join-message-delay", 0), getConfig().getInt("papi-delay", 30));
+                        getConfig().getInt("join-message-delay", 0), getConfig().getInt("refresh-delay", 30));
 
                 getCommand("link").setExecutor(new SpigotLinkCommand(common));
                 getCommand("unlink").setExecutor(new SpigotUnlinkCommand(common));
@@ -107,14 +108,23 @@ public class DiscordSyncBukkit extends JavaPlugin {
                 PluginManager pm = Bukkit.getPluginManager();
                 pm.registerEvents(new SpigotJoinListener(common), this);
 
-                metrics = new Metrics(this, DiscordCommon.METRICS_ID);
-                metrics.addCustomChart(new AllTimeLinkCountChart());
-                metrics.addCustomChart(new DiscordCountChart());
-                metrics.addCustomChart(new DiscordOnlineChart());
-                metrics.addCustomChart(new LinkCountChart());
-                metrics.addCustomChart(new RankCountChart());
-                metrics.addCustomChart(new RenameChart());
-                metrics.addCustomChart(new ServerTypeChart());
+                boolean standalone = getConfig().getBoolean("standalone", false);
+
+                if (!standalone) {
+                    metrics = new Metrics(this, DiscordCommon.METRICS_ID);
+                    metrics.addCustomChart(new AllTimeLinkCountChart());
+                    metrics.addCustomChart(new DiscordCountChart());
+                    metrics.addCustomChart(new DiscordOnlineChart());
+                    metrics.addCustomChart(new LinkCountChart());
+                    metrics.addCustomChart(new RankCountChart());
+                    metrics.addCustomChart(new RenameChart());
+                    metrics.addCustomChart(new ServerTypeChart());
+                } else {
+                    DiscordCommon.getLogger().log(Level.INFO, "Moving on standalone mode");
+                    common.getJda().shutdown();
+                    common.setStandalone(true);
+                    getServer().getMessenger().registerIncomingPluginChannel(this, DiscordCommon.PLUGIN_CHANNEL, new DiscordPluginMessageListener());
+                }
 
                 Bukkit.getScheduler().runTask(this, () -> {
                     if (pm.getPlugin("PlaceholderAPI") != null) {

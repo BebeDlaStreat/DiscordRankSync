@@ -9,6 +9,7 @@ import fr.bebedlastreat.discord.bungeecord.implementations.BungeeOnlineCheck;
 import fr.bebedlastreat.discord.bungeecord.implementations.BungeeRunner;
 import fr.bebedlastreat.discord.bungeecord.listeners.BungeeJoinListener;
 import fr.bebedlastreat.discord.bungeecord.listeners.RedisBungeeListener;
+import fr.bebedlastreat.discord.bungeecord.utils.DiscordBungeePluginMessage;
 import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
@@ -21,6 +22,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.config.Configuration;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 @Getter
@@ -63,6 +66,8 @@ public class DiscordSyncBungee extends Plugin {
         instance = this;
         saveDefaultConfig();
         this.adventure = BungeeAudiences.create(this);
+
+        getProxy().registerChannel(DiscordCommon.PLUGIN_CHANNEL);
 
         String token = getConfig().getString("bot-token");
         String guildId = getConfig().getString("guild-id");
@@ -105,7 +110,7 @@ public class DiscordSyncBungee extends Plugin {
                         new BungeeOnlineCheck(), new BungeeRunner(), new BungeeConsoleExecutor(),
                         ServerType.BUNGEECORD, config.getStringList("reward-command"), config.getStringList("boost-reward"), config.getString("date-format"),
                         new DiscordActivity(config.getBoolean("activity.enable", false), config.getString("activity.type", "PLAYING"),config.getString("activity.message", "DiscordRankSync")),
-                        config.getInt("join-message-delay", 0), config.getInt("papi-delay", 30));
+                        config.getInt("join-message-delay", 0), config.getInt("refresh-delay", 30));
 
                 PluginManager pm = ProxyServer.getInstance().getPluginManager();
                 pm.registerCommand(this, new BungeeLinkCommand(common));
@@ -132,6 +137,14 @@ public class DiscordSyncBungee extends Plugin {
                 DiscordCommon.getLogger().log(Level.INFO, "RedisBungee detected, start working with...");
                 RedisBungeeManager.init();
                 ProxyServer.getInstance().getPluginManager().registerListener(this, new RedisBungeeListener());
+            } else {
+                ProxyServer.getInstance().getScheduler().schedule(this, () -> {
+                    ProxyServer.getInstance().getScheduler().runAsync(this, () -> {
+                        for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+                            DiscordBungeePluginMessage.sendData(player);
+                        }
+                    });
+                }, common.getRefreshDelay(), TimeUnit.SECONDS);
             }
         });
     }

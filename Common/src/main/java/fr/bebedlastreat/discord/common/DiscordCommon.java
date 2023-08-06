@@ -6,10 +6,7 @@ import fr.bebedlastreat.discord.common.commands.StopbotCommand;
 import fr.bebedlastreat.discord.common.commands.UnlinkCommand;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
 import fr.bebedlastreat.discord.common.enums.ServerType;
-import fr.bebedlastreat.discord.common.interfaces.ICommonRunner;
-import fr.bebedlastreat.discord.common.interfaces.IConsoleExecutor;
-import fr.bebedlastreat.discord.common.interfaces.IDatabaseFetch;
-import fr.bebedlastreat.discord.common.interfaces.IOnlineCheck;
+import fr.bebedlastreat.discord.common.interfaces.*;
 import fr.bebedlastreat.discord.common.listeners.JoinListener;
 import fr.bebedlastreat.discord.common.listeners.SlashCommandListener;
 import fr.bebedlastreat.discord.common.logger.DefaultLogger;
@@ -50,6 +47,7 @@ public class DiscordCommon {
     @Getter
     private static DiscordCommon instance;
     public static final int METRICS_ID = 19271;
+    public static final String PLUGIN_CHANNEL = "discordranksync:data";
 
     private final String token;
     private final String guildId;
@@ -78,7 +76,7 @@ public class DiscordCommon {
     private final SimpleDateFormat sdf;
     private final DiscordActivity activity;
     private final int joinMessageDelay;
-    private final int papiDelay;
+    private final int refreshDelay;
 
     private boolean standalone = false;
     private boolean redisBungee = false;
@@ -88,7 +86,7 @@ public class DiscordCommon {
     @Setter
     private static IDiscordLogger logger = new DefaultLogger(Logger.getLogger("DiscordRankSync"));
 
-    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, ICommonRunner runner, IConsoleExecutor consoleExecutor, ServerType serverType, List<String> rewardCommand, List<String> boostReward, String dataFormat, DiscordActivity activity, int joinMessageDelay, int papiDelay) throws InterruptedException {
+    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, ICommonRunner runner, IConsoleExecutor consoleExecutor, ServerType serverType, List<String> rewardCommand, List<String> boostReward, String dataFormat, DiscordActivity activity, int joinMessageDelay, int refreshDelay) throws InterruptedException {
         this.token = token;
         this.guildId = guildId;
         this.rename = rename;
@@ -102,7 +100,7 @@ public class DiscordCommon {
         this.sdf = new SimpleDateFormat(dataFormat);
         this.activity = activity;
         this.joinMessageDelay = joinMessageDelay;
-        this.papiDelay = Math.min(1, papiDelay);
+        this.refreshDelay = Math.min(1, refreshDelay);
         instance = this;
         this.databaseType = databaseType;
         this.credentials = credentials;
@@ -247,6 +245,23 @@ public class DiscordCommon {
     public DiscordMember getMember(String id) {
         Member member = guild.retrieveMemberById(id).complete();
         return new DiscordMember(id, member.getEffectiveName(), member.isBoosting());
+    }
+
+    public void getData(ICommonPlayer<?> player, PlayerDataCallback callback) {
+        String discord = DiscordCommon.getInstance().getDatabaseFetch().discord(player.getUniqueId());
+        boolean linked = discord != null && !discord.isEmpty();
+        String name = "none";
+        boolean boosting = false;
+        if (linked) {
+            DiscordMember member = DiscordCommon.getInstance().getMember(discord);
+            name = member.getEffectiveName();
+            boosting = member.isBoosting();
+        }
+        callback.execute(linked, name, boosting);
+    }
+
+    public interface PlayerDataCallback {
+        void execute(boolean linked, String discordName, boolean boosting);
     }
 
 }

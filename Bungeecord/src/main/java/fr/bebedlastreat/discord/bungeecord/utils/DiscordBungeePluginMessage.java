@@ -1,0 +1,35 @@
+package fr.bebedlastreat.discord.bungeecord.utils;
+
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import fr.bebedlastreat.discord.bungeecord.implementations.BungeePlayer;
+import fr.bebedlastreat.discord.common.DiscordCommon;
+import lombok.experimental.UtilityClass;
+import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Server;
+
+@UtilityClass
+public class DiscordBungeePluginMessage {
+
+    public void sendData(ProxiedPlayer player, boolean linked, String discordName, boolean boost) {
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeBoolean(linked);
+        out.writeUTF(discordName);
+        out.writeBoolean(boost);
+
+        Server server = player.getServer();
+        if (server != null) {
+            ServerInfo info = server.getInfo();
+            if (info != null) {
+                player.getServer().getInfo().sendData(DiscordCommon.PLUGIN_CHANNEL, out.toByteArray());
+            }
+        }
+    }
+
+    public void sendData(ProxiedPlayer player) {
+        DiscordCommon.getInstance().getData(new BungeePlayer(player), (linked, discordName, boosting) -> {
+            DiscordBungeePluginMessage.sendData(player, linked, discordName, boosting);
+        });
+    }
+}

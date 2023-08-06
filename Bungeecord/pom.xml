@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.bebedlastreat</groupId>
         <artifactId>DiscordRankSync</artifactId>
-        <version>1.4</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>Bungeecord</artifactId>
@@ -23,6 +23,10 @@
         <repository>
             <id>bungeecord-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
@@ -55,6 +59,12 @@
             <artifactId>adventure-platform-bungeecord</artifactId>
             <version>4.3.0</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.proxiodev.redisbungee</groupId>
+            <artifactId>RedisBungee-Bungee</artifactId>
+            <version>0.11.3</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

@@ -14,4 +14,9 @@ public class SpigotRunner implements ICommonRunner {
     public void runLater(Runnable runnable, int ticks) {
         Bukkit.getScheduler().runTaskLater(DiscordSyncBukkit.getInstance(), runnable, ticks);
     }
+
+    @Override
+    public void runTask(Runnable runnable, int delay, int ticks) {
+        Bukkit.getScheduler().runTaskTimer(DiscordSyncBukkit.getInstance(), runnable, delay, ticks);
+    }
 }

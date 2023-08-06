@@ -16,4 +16,9 @@ public class BungeeRunner implements ICommonRunner {
     public void runLater(Runnable runnable, int ticks) {
         ProxyServer.getInstance().getScheduler().schedule(DiscordSyncBungee.getInstance(), runnable, ticks*50L, TimeUnit.MILLISECONDS);
     }
+
+    @Override
+    public void runTask(Runnable runnable, int delay, int ticks) {
+        ProxyServer.getInstance().getScheduler().schedule(DiscordSyncBungee.getInstance(), runnable, delay*50L, ticks*50L, TimeUnit.MILLISECONDS);
+    }
 }

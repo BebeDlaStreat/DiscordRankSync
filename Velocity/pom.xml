@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.bebedlastreat</groupId>
         <artifactId>DiscordRankSync</artifactId>
-        <version>1.4</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>Velocity</artifactId>
@@ -23,6 +23,10 @@
         <repository>
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
@@ -50,6 +54,12 @@
             <version>4.14.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.proxiodev.redisbungee</groupId>
+            <artifactId>RedisBungee-Velocity</artifactId>
+            <version>0.11.3</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -61,19 +71,6 @@
             </resource>
         </resources>
         <plugins>
-            <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <version>4.9.10</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>revision</goal>
-                        </goals>
-                        <phase>initialize</phase>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

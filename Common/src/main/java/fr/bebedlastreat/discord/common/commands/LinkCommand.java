@@ -5,6 +5,7 @@ import fr.bebedlastreat.discord.common.interfaces.ICommonCommand;
 import fr.bebedlastreat.discord.common.interfaces.ICommonCommandSender;
 import fr.bebedlastreat.discord.common.interfaces.ICommonPlayer;
 import fr.bebedlastreat.discord.common.objects.WaitingLink;
+import fr.bebedlastreat.discord.redisbungee.RedisBungeeManager;
 
 import java.util.Map;
 
@@ -34,6 +35,9 @@ public class LinkCommand implements ICommonCommand {
                 WaitingLink waitingLink = entry.getValue();
                 if (waitingLink.getExpiry() < System.currentTimeMillis()) {
                     common.getWaitingLinks().remove(s);
+                    if (common.isRedisBungee()) {
+                        RedisBungeeManager.removeWaitingLink(s);
+                    }
                     continue;
                 }
                 if (waitingLink.getUuid().equals(player.getUniqueId())) {
@@ -43,6 +47,9 @@ public class LinkCommand implements ICommonCommand {
                         common.rename(waitingLink.getDiscordId(), player.getName());
                         player.sendMessage(common.getMessages().get("link-success"));
                         common.getWaitingLinks().remove(s);
+                        if (common.isRedisBungee()) {
+                            RedisBungeeManager.removeWaitingLink(s);
+                        }
                         if (common.getDatabaseFetch().firstLink(player.getUniqueId())) {
                             common.getDatabaseFetch().insertFirstLink(player.getUniqueId());
                             common.setAllTimeLinkCount(common.getAllTimeLinkCount() + 1);

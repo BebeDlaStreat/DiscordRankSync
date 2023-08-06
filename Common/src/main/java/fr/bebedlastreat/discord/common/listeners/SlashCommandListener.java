@@ -3,6 +3,7 @@ package fr.bebedlastreat.discord.common.listeners;
 import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.common.objects.WaitingLink;
+import fr.bebedlastreat.discord.redisbungee.RedisBungeeManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -23,6 +24,8 @@ public class SlashCommandListener extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent e) {
+
+        if (common.isStandalone()) return;
         if (e.getName().equalsIgnoreCase("ping")) {
             long time = System.currentTimeMillis();
             e.reply("Pong!").setEphemeral(false)
@@ -70,7 +73,11 @@ public class SlashCommandListener extends ListenerAdapter {
                 }
                 String randomId = getRandomNumber();
                 e.replyEmbeds(new EmbedBuilder().setTitle(common.getMessages().get("validation")).setDescription(common.getMessages().get("validation-desc").replace("{id}", randomId)).setColor(Color.GREEN).build()).setEphemeral(true).queue();
-                common.getWaitingLinks().put(user.getId(), new WaitingLink(user.getId(), System.currentTimeMillis() + 1000 * 60 * 5, uuid, randomId));
+                WaitingLink waitingLink = new WaitingLink(user.getId(), System.currentTimeMillis() + 1000 * 60 * 5, uuid, randomId);
+                common.getWaitingLinks().put(user.getId(), waitingLink);
+                if (common.isRedisBungee()) {
+                    RedisBungeeManager.addWaitingLink(user.getId(), waitingLink);
+                }
             }
         }
         if (e.getName().equalsIgnoreCase("unlink")) {

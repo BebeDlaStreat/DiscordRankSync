@@ -8,6 +8,7 @@ import fr.bebedlastreat.discord.bungeecord.implementations.BungeeConsoleExecutor
 import fr.bebedlastreat.discord.bungeecord.implementations.BungeeOnlineCheck;
 import fr.bebedlastreat.discord.bungeecord.implementations.BungeeRunner;
 import fr.bebedlastreat.discord.bungeecord.listeners.BungeeJoinListener;
+import fr.bebedlastreat.discord.bungeecord.listeners.RedisBungeeListener;
 import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
@@ -15,6 +16,7 @@ import fr.bebedlastreat.discord.common.enums.ServerType;
 import fr.bebedlastreat.discord.common.logger.DefaultLogger;
 import fr.bebedlastreat.discord.common.objects.DiscordActivity;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
+import fr.bebedlastreat.discord.redisbungee.RedisBungeeManager;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
@@ -125,6 +127,11 @@ public class DiscordSyncBungee extends Plugin {
                 e.printStackTrace();
             } finally {
                 DiscordCommon.getLogger().log(Level.INFO, "Discord bot successfully enabled");
+            }
+            if (ProxyServer.getInstance().getPluginManager().getPlugin("RedisBungee") != null) {
+                DiscordCommon.getLogger().log(Level.INFO, "RedisBungee detected, start working with...");
+                RedisBungeeManager.init();
+                ProxyServer.getInstance().getPluginManager().registerListener(this, new RedisBungeeListener());
             }
         });
     }

@@ -15,4 +15,9 @@ public class VelocityRunner implements ICommonRunner {
     public void runLater(Runnable runnable, int ticks) {
         DiscordSyncVelocity.getServer().getScheduler().buildTask(DiscordSyncVelocity.getInstance(), runnable).delay(ticks* 50L, TimeUnit.MILLISECONDS).schedule();
     }
+
+    @Override
+    public void runTask(Runnable runnable, int delay, int ticks) {
+        DiscordSyncVelocity.getServer().getScheduler().buildTask(DiscordSyncVelocity.getInstance(), runnable).delay(delay* 50L, TimeUnit.MILLISECONDS).repeat(ticks*50L, TimeUnit.MILLISECONDS).schedule();
+    }
 }

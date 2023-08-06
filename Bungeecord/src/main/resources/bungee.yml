@@ -3,7 +3,8 @@ version: ${project.version}
 description: Allow user to link their discord to their minecraft account
 author: BebeDlaStreat
 main: fr.bebedlastreat.discord.bungeecord.DiscordSyncBungee
-
+softDepends:
+  - RedisBungee
 commands:
   link:
     description: Confirm link to your discord account

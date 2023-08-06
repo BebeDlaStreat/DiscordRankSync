@@ -6,8 +6,16 @@
 
     <groupId>fr.bebedlastreat</groupId>
     <artifactId>DiscordRankSync</artifactId>
-    <version>1.4</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
+
+    <properties>
+        <revision>1.5-beta</revision>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <modules>
         <module>Common</module>
         <module>Bukkit</module>
@@ -15,12 +23,6 @@
         <module>Velocity</module>
         <module>Plugin</module>
     </modules>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <repositories>
     </repositories>

@@ -21,6 +21,7 @@ import fr.bebedlastreat.discord.common.objects.WaitingLink;
 import fr.bebedlastreat.discord.common.sql.SqlCredentials;
 import fr.bebedlastreat.discord.common.sql.SqlFetch;
 import fr.bebedlastreat.discord.common.sql.SqlHandler;
+import fr.bebedlastreat.discord.redisbungee.RedisBungeeManager;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,7 +60,7 @@ public class DiscordCommon {
     private final Map<String, Object> credentials;
     private final Map<String, String> messages;
     private final IDatabaseFetch databaseFetch;
-    private final IOnlineCheck onlineCheck;
+    private IOnlineCheck onlineCheck;
     private final Map<String, WaitingLink> waitingLinks = new HashMap<>();
     private final List<DiscordRank> ranks;
     private final ICommonRunner runner;
@@ -78,6 +79,9 @@ public class DiscordCommon {
     private final DiscordActivity activity;
     private final int joinMessageDelay;
     private final int papiDelay;
+
+    private boolean standalone = false;
+    private boolean redisBungee = false;
 
     private SqlHandler sqlHandler;
     @Getter
@@ -170,9 +174,21 @@ public class DiscordCommon {
         }
         linkCount = databaseFetch.count();
         allTimeLinkCount = databaseFetch.allTimeCount();
+
+        runner.runTask(() -> {
+            if (redisBungee) {
+                RedisBungeeManager.updateMainProxy();
+            }
+        }, 100, 100);
     }
 
     public void addRole(String discordId, DiscordRank rank) {
+        if (standalone) {
+            if (redisBungee) {
+                RedisBungeeManager.addRole(discordId, rank);
+            }
+            return;
+        }
         if (rank.getRole() == null) return;
         Member member = guild.retrieveMemberById(discordId).complete();
         if (member == null) return;
@@ -187,6 +203,12 @@ public class DiscordCommon {
     }
 
     public void removeRole(String discordId, DiscordRank rank) {
+        if (standalone) {
+            if (redisBungee) {
+                RedisBungeeManager.removeRole(discordId, rank);
+            }
+            return;
+        }
         if (rank.getRole() == null) return;
         Member member = guild.retrieveMemberById(discordId).complete();
         if (member == null) return;
@@ -201,6 +223,12 @@ public class DiscordCommon {
     }
 
     public void rename(String discordId, String name) {
+        if (standalone) {
+            if (redisBungee) {
+                RedisBungeeManager.rename(discordId, name);
+            }
+            return;
+        }
         if (!rename) return;
         if (guild == null) return;
         Member member = guild.retrieveMemberById(discordId).complete();

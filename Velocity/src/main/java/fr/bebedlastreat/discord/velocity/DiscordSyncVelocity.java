@@ -6,6 +6,7 @@ import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.event.EventManager;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -16,6 +17,7 @@ import fr.bebedlastreat.discord.common.enums.ServerType;
 import fr.bebedlastreat.discord.common.logger.VelocityLogger;
 import fr.bebedlastreat.discord.common.objects.DiscordActivity;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
+import fr.bebedlastreat.discord.redisbungee.RedisBungeeManager;
 import fr.bebedlastreat.discord.velocity.commands.VelocityClaimBoostCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityLinkCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityStopbotCommand;
@@ -23,6 +25,7 @@ import fr.bebedlastreat.discord.velocity.commands.VelocityUnlinkCommand;
 import fr.bebedlastreat.discord.velocity.implementations.VelocityConsoleExecutor;
 import fr.bebedlastreat.discord.velocity.implementations.VelocityOnlineCheck;
 import fr.bebedlastreat.discord.velocity.implementations.VelocityRunner;
+import fr.bebedlastreat.discord.velocity.listeners.RedisBungeeListener;
 import fr.bebedlastreat.discord.velocity.listeners.VelocityJoinListener;
 import fr.bebedlastreat.discord.velocity.squishyyaml.ConfigurationSection;
 import fr.bebedlastreat.discord.velocity.squishyyaml.YamlConfiguration;
@@ -44,7 +47,8 @@ import java.util.logging.Level;
         name = "DiscordRankSync",
         version = "${project.version}",
         authors = "BebeDlaStreat",
-        description = "Allow user to link their discord to their minecraft account"
+        description = "Allow user to link their discord to their minecraft account",
+        dependencies = {@Dependency(id = "redisbungee", optional = true)}
 )
 @Getter
 @Setter
@@ -146,6 +150,11 @@ public class DiscordSyncVelocity {
                 e.printStackTrace();
             } finally {
                 DiscordCommon.getLogger().log(Level.INFO, "Discord bot successfully enabled");
+            }
+            if (server.getPluginManager().getPlugin("redisbungee").isPresent()) {
+                DiscordCommon.getLogger().log(Level.INFO, "RedisBungee detected, start working with...");
+                RedisBungeeManager.init();
+                server.getEventManager().register(this, new RedisBungeeListener());
             }
         }).schedule();
     }

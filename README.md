@@ -22,7 +22,7 @@
 # How to use the bot to link your Minecraft account?
 - Use /link on your Discord server
 - Use the given command in the Minecraft chat
-- Rejoin the Minecraft server
+- Rejoin the Minecraft server to get your rank
 
 ![image](https://github.com/BebeDlaStreat/DiscordRankSync/assets/114857048/2804e405-5589-49ec-8283-f7222e422453)
   

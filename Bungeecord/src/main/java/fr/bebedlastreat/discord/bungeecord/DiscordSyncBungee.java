@@ -112,21 +112,11 @@ public class DiscordSyncBungee extends Plugin {
                         new DiscordActivity(config.getBoolean("activity.enable", false), config.getString("activity.type", "PLAYING"),config.getString("activity.message", "DiscordRankSync")),
                         config.getInt("join-message-delay", 0), config.getInt("refresh-delay", 30));
 
-                PluginManager pm = ProxyServer.getInstance().getPluginManager();
-                pm.registerCommand(this, new BungeeLinkCommand(common));
-                pm.registerCommand(this, new BungeeUnlinkCommand(common));
-                pm.registerCommand(this, new BungeeClaimBoostCommand(common));
-                pm.registerCommand(this, new BungeeStopbotCommand(common));
-                pm.registerListener(this, new BungeeJoinListener(common));
+                PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
+                registerCommands(pluginManager);
+                pluginManager.registerListener(this, new BungeeJoinListener(common));
 
-                metrics = new Metrics(this, DiscordCommon.METRICS_ID);
-                metrics.addCustomChart(new AllTimeLinkCountChart());
-                metrics.addCustomChart(new DiscordCountChart());
-                metrics.addCustomChart(new DiscordOnlineChart());
-                metrics.addCustomChart(new LinkCountChart());
-                metrics.addCustomChart(new RankCountChart());
-                metrics.addCustomChart(new RenameChart());
-                metrics.addCustomChart(new ServerTypeChart());
+                initMetrics();
             } catch (InterruptedException e) {
                 DiscordCommon.getLogger().log(Level.SEVERE, "Failed to enable discord bot");
                 e.printStackTrace();
@@ -149,12 +139,29 @@ public class DiscordSyncBungee extends Plugin {
         });
     }
 
+    private void registerCommands(PluginManager pluginManager) {
+        pluginManager.registerCommand(this, new BungeeLinkCommand(common));
+        pluginManager.registerCommand(this, new BungeeUnlinkCommand(common));
+        pluginManager.registerCommand(this, new BungeeClaimBoostCommand(common));
+        pluginManager.registerCommand(this, new BungeeStopbotCommand(common));
+    }
+
+    private void initMetrics() {
+        metrics = new Metrics(this, DiscordCommon.METRICS_ID);
+        metrics.addCustomChart(new AllTimeLinkCountChart());
+        metrics.addCustomChart(new DiscordCountChart());
+        metrics.addCustomChart(new DiscordOnlineChart());
+        metrics.addCustomChart(new LinkCountChart());
+        metrics.addCustomChart(new RankCountChart());
+        metrics.addCustomChart(new RenameChart());
+        metrics.addCustomChart(new ServerTypeChart());
+    }
+
     @Override
     public void onDisable() {
-        if(this.adventure != null) {
-            this.adventure.close();
-            this.adventure = null;
-        }
+        if(this.adventure == null) return;
+        this.adventure.close();
+        this.adventure = null;
     }
 
     private void saveDefaultConfig() {

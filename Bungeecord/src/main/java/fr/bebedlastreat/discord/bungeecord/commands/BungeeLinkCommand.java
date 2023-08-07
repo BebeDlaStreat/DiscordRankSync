@@ -21,6 +21,5 @@ public class BungeeLinkCommand extends Command {
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
         common.getLinkCommand().execute(new BungeePlayer(player), args);
-
     }
 }

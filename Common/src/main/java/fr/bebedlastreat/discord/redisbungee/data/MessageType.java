@@ -5,6 +5,5 @@ public enum MessageType {
     REMOVE_ROLE,
     RENAME,
     ADD_WAITING_LINK,
-    REMOVE_WAITING_LINK,
-    ;
+    REMOVE_WAITING_LINK
 }

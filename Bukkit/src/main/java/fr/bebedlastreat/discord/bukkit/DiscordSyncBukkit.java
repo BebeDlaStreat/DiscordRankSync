@@ -66,21 +66,18 @@ public class DiscordSyncBukkit extends JavaPlugin {
             ranks.add(new DiscordRank(getConfig().getString("ranks." + key + ".id"), getConfig().getString("ranks." + key + ".permission")));
         }
 
-        String db = getConfig().getString("database");
-        DatabaseType databaseType = DatabaseType.getByName(db);
+        String database = getConfig().getString("database");
+        DatabaseType databaseType = DatabaseType.getByName(database);
         Map<String, Object> credentials = new HashMap<>();
-        switch (databaseType) {
-            case SQL: {
-                ConfigurationSection section = getConfig().getConfigurationSection("sql");
-                credentials.put("ip", section.getString("ip"));
-                credentials.put("port", section.getInt("port"));
-                credentials.put("user", section.getString("user"));
-                credentials.put("password", section.getString("password"));
-                credentials.put("database", section.getString("database"));
-                credentials.put("table", section.getString("table"));
-                credentials.put("properties", section.getString("properties"));
-                break;
-            }
+        if (databaseType == DatabaseType.SQL) {
+            ConfigurationSection section = getConfig().getConfigurationSection("sql");
+            credentials.put("ip", section.getString("ip"));
+            credentials.put("port", section.getInt("port"));
+            credentials.put("user", section.getString("user"));
+            credentials.put("password", section.getString("password"));
+            credentials.put("database", section.getString("database"));
+            credentials.put("table", section.getString("table"));
+            credentials.put("properties", section.getString("properties"));
         }
 
         Map<String, String> messages = new HashMap<>();
@@ -99,24 +96,14 @@ public class DiscordSyncBukkit extends JavaPlugin {
                         new DiscordActivity(getConfig().getBoolean("activity.enable", false), getConfig().getString("activity.type", "PLAYING"), getConfig().getString("activity.message", "DiscordRankSync")),
                         getConfig().getInt("join-message-delay", 0), getConfig().getInt("refresh-delay", 30));
 
-                getCommand("link").setExecutor(new SpigotLinkCommand(common));
-                getCommand("unlink").setExecutor(new SpigotUnlinkCommand(common));
-                getCommand("claimboost").setExecutor(new SpigotClaimBoostCommand(common));
-                getCommand("stopbot").setExecutor(new SpigotStopbotCommand(common));
-                PluginManager pm = Bukkit.getPluginManager();
-                pm.registerEvents(new SpigotJoinListener(common), this);
+                registerCommands();
+                PluginManager pluginManager = Bukkit.getPluginManager();
+                pluginManager.registerEvents(new SpigotJoinListener(common), this);
 
                 boolean standalone = getConfig().getBoolean("standalone", false);
 
                 if (!standalone) {
-                    metrics = new Metrics(this, DiscordCommon.METRICS_ID);
-                    metrics.addCustomChart(new AllTimeLinkCountChart());
-                    metrics.addCustomChart(new DiscordCountChart());
-                    metrics.addCustomChart(new DiscordOnlineChart());
-                    metrics.addCustomChart(new LinkCountChart());
-                    metrics.addCustomChart(new RankCountChart());
-                    metrics.addCustomChart(new RenameChart());
-                    metrics.addCustomChart(new ServerTypeChart());
+                    initMetrics();
                 } else {
                     DiscordCommon.getLogger().log(Level.INFO, "Moving on standalone mode");
                     common.getJda().shutdown();
@@ -125,7 +112,7 @@ public class DiscordSyncBukkit extends JavaPlugin {
                 }
 
                 Bukkit.getScheduler().runTask(this, () -> {
-                    if (pm.getPlugin("PlaceholderAPI") != null) {
+                    if (pluginManager.getPlugin("PlaceholderAPI") != null) {
                         DiscordPapi.init();
                     }
                 });
@@ -138,11 +125,28 @@ public class DiscordSyncBukkit extends JavaPlugin {
         });
     }
 
+    private void registerCommands() {
+        getCommand("link").setExecutor(new SpigotLinkCommand(common));
+        getCommand("unlink").setExecutor(new SpigotUnlinkCommand(common));
+        getCommand("claimboost").setExecutor(new SpigotClaimBoostCommand(common));
+        getCommand("stopbot").setExecutor(new SpigotStopbotCommand(common));
+    }
+
+    private void initMetrics() {
+        metrics = new Metrics(this, DiscordCommon.METRICS_ID);
+        metrics.addCustomChart(new AllTimeLinkCountChart());
+        metrics.addCustomChart(new DiscordCountChart());
+        metrics.addCustomChart(new DiscordOnlineChart());
+        metrics.addCustomChart(new LinkCountChart());
+        metrics.addCustomChart(new RankCountChart());
+        metrics.addCustomChart(new RenameChart());
+        metrics.addCustomChart(new ServerTypeChart());
+    }
+
     @Override
     public void onDisable() {
-        if(this.adventure != null) {
-            this.adventure.close();
-            this.adventure = null;
-        }
+        if(this.adventure == null) return;
+        this.adventure.close();
+        this.adventure = null;
     }
 }

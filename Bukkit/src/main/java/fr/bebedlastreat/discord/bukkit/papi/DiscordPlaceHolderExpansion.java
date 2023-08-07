@@ -42,7 +42,7 @@ public class DiscordPlaceHolderExpansion extends PlaceholderExpansion {
         if (offlinePlayer == null) return null;
         Player player = offlinePlayer.getPlayer();
         if (player == null) return null;
-        List<String> identifiers = Arrays.asList("discord", "is_linked", "is_boost");
+        final List<String> identifiers = Arrays.asList("discord", "is_linked", "is_boost");
         if(!identifiers.contains(identifier.toLowerCase())) return null;
 
         boolean linked = false;

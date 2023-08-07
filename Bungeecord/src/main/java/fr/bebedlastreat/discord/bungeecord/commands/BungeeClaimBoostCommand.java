@@ -21,6 +21,5 @@ public class BungeeClaimBoostCommand extends Command {
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
         common.getClaimBoostCommand().execute(new BungeePlayer(player), args);
-
     }
 }

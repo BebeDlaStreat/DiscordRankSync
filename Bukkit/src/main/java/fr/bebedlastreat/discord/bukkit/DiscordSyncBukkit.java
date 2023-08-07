@@ -39,10 +39,8 @@ public class DiscordSyncBukkit extends JavaPlugin {
 
     @Getter
     private static DiscordSyncBukkit instance;
-
     private DiscordCommon common;
     private Metrics metrics;
-
     private BukkitAudiences adventure;
 
     public @NonNull BukkitAudiences adventure() {

@@ -10,7 +10,7 @@
 
 # Download
 - [SpigotMC](https://www.spigotmc.org/resources/discordranksync.111546/)
-- [Latest release](https://github.com/BebeDlaStreat/DiscordRankSync/releases)
+- [Latest release](https://github.com/BebeDlaStreat/DiscordRankSync/releases/latest)
 
 # Setup
 - Go to the <a href="https://discord.com/developers/applications">Discord developer portal</a> and create a new application

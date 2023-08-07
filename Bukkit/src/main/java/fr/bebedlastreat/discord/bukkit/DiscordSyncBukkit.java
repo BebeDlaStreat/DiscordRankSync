@@ -69,15 +69,18 @@ public class DiscordSyncBukkit extends JavaPlugin {
         String database = getConfig().getString("database");
         DatabaseType databaseType = DatabaseType.getByName(database);
         Map<String, Object> credentials = new HashMap<>();
-        if (databaseType == DatabaseType.SQL) {
-            ConfigurationSection section = getConfig().getConfigurationSection("sql");
-            credentials.put("ip", section.getString("ip"));
-            credentials.put("port", section.getInt("port"));
-            credentials.put("user", section.getString("user"));
-            credentials.put("password", section.getString("password"));
-            credentials.put("database", section.getString("database"));
-            credentials.put("table", section.getString("table"));
-            credentials.put("properties", section.getString("properties"));
+        switch (databaseType) {
+            case SQL: {
+                ConfigurationSection section = getConfig().getConfigurationSection("sql");
+                credentials.put("ip", section.getString("ip"));
+                credentials.put("port", section.getInt("port"));
+                credentials.put("user", section.getString("user"));
+                credentials.put("password", section.getString("password"));
+                credentials.put("database", section.getString("database"));
+                credentials.put("table", section.getString("table"));
+                credentials.put("properties", section.getString("properties"));
+                break;
+            }
         }
 
         Map<String, String> messages = new HashMap<>();

@@ -21,6 +21,5 @@ public class BungeeUnlinkCommand extends Command {
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
         common.getUnlinkCommand().execute(new BungeePlayer(player), args);
-
     }
 }

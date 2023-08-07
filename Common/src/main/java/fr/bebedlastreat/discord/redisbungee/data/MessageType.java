@@ -6,5 +6,4 @@ public enum MessageType {
     RENAME,
     ADD_WAITING_LINK,
     REMOVE_WAITING_LINK,
-    ;
 }

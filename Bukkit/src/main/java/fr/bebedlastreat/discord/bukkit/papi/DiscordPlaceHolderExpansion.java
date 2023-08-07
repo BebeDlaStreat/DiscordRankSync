@@ -9,6 +9,9 @@ import org.bukkit.metadata.MetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class DiscordPlaceHolderExpansion extends PlaceholderExpansion {
 
     private final DiscordSyncBukkit main;
@@ -39,28 +42,30 @@ public class DiscordPlaceHolderExpansion extends PlaceholderExpansion {
         if (offlinePlayer == null) return null;
         Player player = offlinePlayer.getPlayer();
         if (player == null) return null;
+        final List<String> identifiers = Arrays.asList("discord", "is_linked", "is_boost");
+        if(!identifiers.contains(identifier.toLowerCase())) return null;
 
-        if (identifier.equalsIgnoreCase("discord") || identifier.equalsIgnoreCase("is_linked") || identifier.equalsIgnoreCase("is_boost")) {
-            boolean linked = false;
-            for (MetadataValue value : player.getMetadata("discord_linked")) {
-                if (value.getOwningPlugin().equals(main)) {
-                    linked = value.asBoolean();
-                }
+        boolean linked = false;
+        for (MetadataValue value : player.getMetadata("discord_linked")) {
+            if (value.getOwningPlugin().equals(main)) {
+                linked = value.asBoolean();
             }
-            if (identifier.equalsIgnoreCase("is_linked")) {
+        }
+
+        switch (identifier.toLowerCase()) {
+            case "is_linked":
                 return linked ? "true" : "false";
-            }
-            if (identifier.equalsIgnoreCase("discord")) {
+
+            case "discord":
                 if (!linked) return common.getMessages().get("papi-not-linked");
                 for (MetadataValue value : player.getMetadata("discord_name")) {
                     if (value.getOwningPlugin().equals(main)) {
                         return value.asString();
                     }
                 }
-
                 return "none";
-            }
-            if (identifier.equalsIgnoreCase("is_boost")) {
+
+            case "is_boost":
                 if (!linked) return common.getMessages().get("papi-not-linked");
                 for (MetadataValue value : player.getMetadata("discord_boosting")) {
                     if (value.getOwningPlugin().equals(main)) {
@@ -68,7 +73,6 @@ public class DiscordPlaceHolderExpansion extends PlaceholderExpansion {
                     }
                 }
                 return "false";
-            }
         }
 
         return null;

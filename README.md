@@ -25,6 +25,8 @@
 - Rejoin the Minecraft server to get your rank
 
 ![image](https://github.com/BebeDlaStreat/DiscordRankSync/assets/114857048/2804e405-5589-49ec-8283-f7222e422453)
-  
 
-<img align="center" src="https://bstats.org/signatures/bukkit/DiscordRankSync.svg">
+
+<a href="https://bstats.org/plugin/bukkit/DiscordRankSync/19271">
+  <img align="center" src="https://bstats.org/signatures/bukkit/DiscordRankSync.svg">
+</a>

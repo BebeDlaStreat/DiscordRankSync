@@ -8,6 +8,7 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.PluginManager;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -130,27 +131,10 @@ public class DiscordSyncVelocity {
 
                 EventManager eventManager = server.getEventManager();
                 CommandManager commandManager = server.getCommandManager();
-
-
-                CommandMeta link = commandManager.metaBuilder("link").build();
-                commandManager.register(link, new VelocityLinkCommand(common));
-                CommandMeta unlink = commandManager.metaBuilder("unlink").build();
-                commandManager.register(unlink, new VelocityUnlinkCommand(common));
-                CommandMeta claimBoost = commandManager.metaBuilder("claimboost").build();
-                commandManager.register(claimBoost, new VelocityClaimBoostCommand(common));
-                CommandMeta stopbot = commandManager.metaBuilder("stopbot").aliases("stopdiscord").build();
-                commandManager.register(stopbot, new VelocityStopbotCommand(common));
-
+                registerCommands(commandManager);
                 eventManager.register(this, new VelocityJoinListener(common));
 
-                metrics = metricsFactory.make(this, DiscordCommon.METRICS_ID);
-                metrics.addCustomChart(new AllTimeLinkCountChart());
-                metrics.addCustomChart(new DiscordCountChart());
-                metrics.addCustomChart(new DiscordOnlineChart());
-                metrics.addCustomChart(new LinkCountChart());
-                metrics.addCustomChart(new RankCountChart());
-                metrics.addCustomChart(new RenameChart());
-                metrics.addCustomChart(new ServerTypeChart());
+                initMetrics();
             } catch (InterruptedException e) {
                 DiscordCommon.getLogger().log(Level.SEVERE, "Failed to enable discord bot");
                 e.printStackTrace();
@@ -169,6 +153,28 @@ public class DiscordSyncVelocity {
                 }).repeat(common.getRefreshDelay(), TimeUnit.SECONDS).schedule();
             }
         }).schedule();
+    }
+
+    private void registerCommands(CommandManager commandManager) {
+        CommandMeta link = commandManager.metaBuilder("link").build();
+        commandManager.register(link, new VelocityLinkCommand(common));
+        CommandMeta unlink = commandManager.metaBuilder("unlink").build();
+        commandManager.register(unlink, new VelocityUnlinkCommand(common));
+        CommandMeta claimBoost = commandManager.metaBuilder("claimboost").build();
+        commandManager.register(claimBoost, new VelocityClaimBoostCommand(common));
+        CommandMeta stopbot = commandManager.metaBuilder("stopbot").aliases("stopdiscord").build();
+        commandManager.register(stopbot, new VelocityStopbotCommand(common));
+    }
+
+    private void initMetrics() {
+        metrics = metricsFactory.make(this, DiscordCommon.METRICS_ID);
+        metrics.addCustomChart(new AllTimeLinkCountChart());
+        metrics.addCustomChart(new DiscordCountChart());
+        metrics.addCustomChart(new DiscordOnlineChart());
+        metrics.addCustomChart(new LinkCountChart());
+        metrics.addCustomChart(new RankCountChart());
+        metrics.addCustomChart(new RenameChart());
+        metrics.addCustomChart(new ServerTypeChart());
     }
 
     private void saveDefaultConfig() {

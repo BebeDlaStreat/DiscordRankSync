@@ -99,13 +99,12 @@ public class DiscordSyncBukkit extends JavaPlugin {
                         new DiscordActivity(getConfig().getBoolean("activity.enable", false), getConfig().getString("activity.type", "PLAYING"), getConfig().getString("activity.message", "DiscordRankSync")),
                         getConfig().getInt("join-message-delay", 0), getConfig().getInt("refresh-delay", 30));
 
-                registerCommands();
-                PluginManager pluginManager = Bukkit.getPluginManager();
-                pluginManager.registerEvents(new SpigotJoinListener(common), this);
-
                 boolean standalone = getConfig().getBoolean("standalone", false);
 
+                PluginManager pluginManager = Bukkit.getPluginManager();
                 if (!standalone) {
+                    registerCommands();
+                    pluginManager.registerEvents(new SpigotJoinListener(common), this);
                     initMetrics();
                 } else {
                     DiscordCommon.getLogger().log(Level.INFO, "Moving on standalone mode");

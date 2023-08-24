@@ -73,7 +73,7 @@ public class DiscordPlaceHolderExpansion extends PlaceholderExpansion {
                     }
                 }
                 return "false";
-            case "": {
+            case "members": {
                 return String.valueOf(DiscordPapi.getMemberCount());
             }
         }

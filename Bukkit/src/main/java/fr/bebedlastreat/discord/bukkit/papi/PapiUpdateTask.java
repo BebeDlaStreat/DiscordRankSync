@@ -27,6 +27,6 @@ public class PapiUpdateTask extends BukkitRunnable {
                 }
             });
         }
-        DiscordPapi.setMemberCount(DiscordCommon.getInstance().getGuild().retrieveMetaData().map(Guild.MetaData::getApproximateMembers).complete());
+        DiscordPapi.setMemberCount(DiscordCommon.getInstance().getGuild().retrieveMetaData().map(metaData -> metaData.getApproximateMembers()).complete());
     }
 }

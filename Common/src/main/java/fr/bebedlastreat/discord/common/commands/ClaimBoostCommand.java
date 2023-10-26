@@ -31,9 +31,11 @@ public class ClaimBoostCommand implements ICommonCommand {
                 if (common.getDatabaseFetch().canBoost(player.getUniqueId())) {
                     common.getDatabaseFetch().deleteBoost(player.getUniqueId());
                     common.getDatabaseFetch().insertBoost(player.getUniqueId(), System.currentTimeMillis() + (1000L*60*60*24*YearMonth.now().lengthOfMonth()));
-                    for (String command : common.getBoostReward()) {
-                        common.getConsoleExecutor().execute(command.replace("{player}", player.getName()));
-                    }
+                    common.getRunner().runLater(() -> {
+                        for (String command : common.getBoostReward()) {
+                            common.getConsoleExecutor().execute(command.replace("{player}", player.getName()));
+                        }
+                    }, 0);
                     player.sendMessage(common.getMessages().get("boost-claim"));
                 } else {
                     player.sendMessage(common.getMessages().get("boost-countdown").replace("{date}", common.getSdf().format(new Date(common.getDatabaseFetch().getNextBoost(player.getUniqueId())))));

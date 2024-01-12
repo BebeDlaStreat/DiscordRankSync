@@ -6,6 +6,10 @@ import org.bukkit.Bukkit;
 
 public class SpigotRunner implements ICommonRunner {
     @Override
+    public void run(Runnable runnable) {
+        Bukkit.getScheduler().runTask(DiscordSyncBukkit.getInstance(), runnable);
+    }
+    @Override
     public void runAsync(Runnable runnable) {
         Bukkit.getScheduler().runTaskAsynchronously(DiscordSyncBukkit.getInstance(), runnable);
     }

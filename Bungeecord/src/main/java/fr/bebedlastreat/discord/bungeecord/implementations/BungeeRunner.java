@@ -8,6 +8,10 @@ import java.util.concurrent.TimeUnit;
 
 public class BungeeRunner implements ICommonRunner {
     @Override
+    public void run(Runnable runnable) {
+        runLater(runnable, 0);
+    }
+    @Override
     public void runAsync(Runnable runnable) {
         ProxyServer.getInstance().getScheduler().runAsync(DiscordSyncBungee.getInstance(), runnable);
     }

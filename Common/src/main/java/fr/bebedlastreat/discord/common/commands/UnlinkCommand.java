@@ -18,7 +18,9 @@ public class UnlinkCommand implements ICommonCommand {
     public void execute(ICommonPlayer<?> player, String[] args) {
         common.getRunner().runAsync(() -> {
             if (!common.getDatabaseFetch().exist(player.getUniqueId())) {
-                player.sendMessage(common.getMessages().get("not-linked"));
+                common.getRunner().run(() -> {
+                    player.sendMessage(common.getMessages().get("not-linked"));
+                });
                 return;
             }
             String discord = common.getDatabaseFetch().discord(player.getUniqueId());
@@ -28,7 +30,9 @@ public class UnlinkCommand implements ICommonCommand {
 
             common.getDatabaseFetch().delete(player.getUniqueId());
             common.setLinkCount(common.getLinkCount() - 1);
-            player.sendMessage(common.getMessages().get("unlink-success"));
+            common.getRunner().run(() -> {
+                player.sendMessage(common.getMessages().get("unlink-success"));
+            });
         });
     }
 

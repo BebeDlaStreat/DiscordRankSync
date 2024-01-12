@@ -7,6 +7,11 @@ import java.util.concurrent.TimeUnit;
 
 public class VelocityRunner implements ICommonRunner {
     @Override
+    public void run(Runnable runnable) {
+        DiscordSyncVelocity.getServer().getScheduler().buildTask(DiscordSyncVelocity.getInstance(), runnable).schedule();
+    }
+
+    @Override
     public void runAsync(Runnable runnable) {
         DiscordSyncVelocity.getServer().getScheduler().buildTask(DiscordSyncVelocity.getInstance(), runnable).schedule();
     }

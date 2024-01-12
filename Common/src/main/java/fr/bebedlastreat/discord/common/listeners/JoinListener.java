@@ -28,13 +28,9 @@ public class JoinListener implements ICommonListener {
             } else {
                 String joinMessage = common.getMessages().getOrDefault("join-message", "");
                 if (!joinMessage.isEmpty()) {
-                    if (common.getJoinMessageDelay() == 0) {
+                    common.getRunner().runLater(() -> {
                         player.sendMessage(joinMessage);
-                    } else {
-                        common.getRunner().runLater(() -> {
-                            player.sendMessage(joinMessage);
-                        }, common.getJoinMessageDelay());
-                    }
+                    }, common.getJoinMessageDelay());
                 }
             }
         });

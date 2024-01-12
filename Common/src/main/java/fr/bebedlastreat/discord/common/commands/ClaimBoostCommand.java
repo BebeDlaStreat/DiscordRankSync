@@ -22,7 +22,9 @@ public class ClaimBoostCommand implements ICommonCommand {
         if (common.getBoostReward().isEmpty()) return;
         common.getRunner().runAsync(() -> {
             if (!common.getDatabaseFetch().exist(player.getUniqueId())) {
-                player.sendMessage(common.getMessages().get("not-linked"));
+                common.getRunner().run(() -> {
+                    player.sendMessage(common.getMessages().get("not-linked"));
+                });
                 return;
             }
             String discord = common.getDatabaseFetch().discord(player.getUniqueId());
@@ -36,12 +38,19 @@ public class ClaimBoostCommand implements ICommonCommand {
                             common.getConsoleExecutor().execute(command.replace("{player}", player.getName()));
                         }
                     }, 0);
-                    player.sendMessage(common.getMessages().get("boost-claim"));
+
+                    common.getRunner().run(() -> {
+                        player.sendMessage(common.getMessages().get("boost-claim"));
+                    });
                 } else {
-                    player.sendMessage(common.getMessages().get("boost-countdown").replace("{date}", common.getSdf().format(new Date(common.getDatabaseFetch().getNextBoost(player.getUniqueId())))));
+                    common.getRunner().run(() -> {
+                        player.sendMessage(common.getMessages().get("boost-countdown").replace("{date}", common.getSdf().format(new Date(common.getDatabaseFetch().getNextBoost(player.getUniqueId())))));
+                    });
                 }
             } else {
-                player.sendMessage(common.getMessages().get("not-boosting"));
+                common.getRunner().run(() -> {
+                    player.sendMessage(common.getMessages().get("not-boosting"));
+                });
             }
         });
     }

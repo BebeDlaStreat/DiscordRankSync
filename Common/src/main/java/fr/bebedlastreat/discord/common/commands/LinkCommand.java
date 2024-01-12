@@ -26,7 +26,9 @@ public class LinkCommand implements ICommonCommand {
 
         common.getRunner().runAsync(() -> {
             if (common.getDatabaseFetch().exist(player.getUniqueId())) {
-                player.sendMessage(common.getMessages().get("you-already-link"));
+                common.getRunner().run(() -> {
+                    player.sendMessage(common.getMessages().get("you-already-link"));
+                });
                 return;
             }
             String code = args[0];
@@ -45,7 +47,9 @@ public class LinkCommand implements ICommonCommand {
                         common.getDatabaseFetch().insert(waitingLink.getUuid(), player.getName(), waitingLink.getDiscordId());
                         common.setLinkCount(common.getLinkCount() + 1);
                         common.rename(waitingLink.getDiscordId(), player.getName());
-                        player.sendMessage(common.getMessages().get("link-success"));
+                        common.getRunner().run(() -> {
+                            player.sendMessage(common.getMessages().get("link-success"));
+                        });
                         common.getWaitingLinks().remove(s);
                         if (common.isRedisBungee()) {
                             RedisBungeeManager.removeWaitingLink(s);
@@ -62,12 +66,16 @@ public class LinkCommand implements ICommonCommand {
                             }, 0);
                         }
                     } else {
-                        player.sendMessage(common.getMessages().get("invalid-code"));
+                        common.getRunner().run(() -> {
+                            player.sendMessage(common.getMessages().get("invalid-code"));
+                        });
                     }
                     return;
                 }
             }
-            player.sendMessage(common.getMessages().get("no-link"));
+            common.getRunner().run(() -> {
+                player.sendMessage(common.getMessages().get("no-link"));
+            });
         });
     }
 

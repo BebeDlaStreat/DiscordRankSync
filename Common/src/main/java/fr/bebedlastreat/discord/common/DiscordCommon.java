@@ -33,6 +33,8 @@ import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -132,8 +134,8 @@ public class DiscordCommon {
         }
 
         this.jda = JDABuilder.createDefault(token)
-                //.enableIntents(GatewayIntent.GUILD_MEMBERS)
-                //.setMemberCachePolicy(MemberCachePolicy.BOOSTER)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                .setMemberCachePolicy(MemberCachePolicy.BOOSTER)
                 .setAutoReconnect(true)
                 .addEventListeners(new SlashCommandListener(this))
                 .build();

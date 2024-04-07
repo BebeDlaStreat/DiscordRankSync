@@ -40,6 +40,7 @@ sql:
   database: "discord" # database sould already be created
   table: "discord_sync" # the table of the table used to store, automatically created
   properties: "?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8"
+  driver: "com.mysql.jdbc.Driver"
 
 # warning: no legacy color support, you must use minimessage format: https://docs.advntr.dev/minimessage/format.html)
 messages:

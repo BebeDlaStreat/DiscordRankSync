@@ -14,6 +14,8 @@ import java.util.function.Function;
 
 @Data
 public class SqlHandler {
+    public static final String DEFAULT_DRIVER = "com.mysql.jdbc.Driver";
+
     @Getter
     private static SqlHandler instance;
     private SqlCredentials credentials;
@@ -42,7 +44,7 @@ public class SqlHandler {
 
     private void setup() {
         HikariConfig config = new HikariConfig();
-        config.setDriverClassName("com.mysql.jdbc.Driver");
+        config.setDriverClassName(credentials.getDriver());
         config.setMaximumPoolSize(maxPoolSize);
         config.setMinimumIdle(minIdle);
         config.setMaxLifetime(maxLifetime);

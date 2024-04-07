@@ -17,6 +17,7 @@ import fr.bebedlastreat.discord.bukkit.commands.SpigotLinkCommand;
 import fr.bebedlastreat.discord.bukkit.commands.SpigotStopbotCommand;
 import fr.bebedlastreat.discord.bukkit.implementations.SpigotRunner;
 import fr.bebedlastreat.discord.bukkit.papi.DiscordPapi;
+import fr.bebedlastreat.discord.common.sql.SqlHandler;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -79,6 +80,7 @@ public class DiscordSyncBukkit extends JavaPlugin {
                 credentials.put("database", section.getString("database"));
                 credentials.put("table", section.getString("table"));
                 credentials.put("properties", section.getString("properties"));
+                credentials.put("driver", section.getString("driver", SqlHandler.DEFAULT_DRIVER));
                 break;
             }
         }

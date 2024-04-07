@@ -20,6 +20,7 @@ import fr.bebedlastreat.discord.common.enums.ServerType;
 import fr.bebedlastreat.discord.common.logger.VelocityLogger;
 import fr.bebedlastreat.discord.common.objects.DiscordActivity;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
+import fr.bebedlastreat.discord.common.sql.SqlHandler;
 import fr.bebedlastreat.discord.redisbungee.RedisBungeeManager;
 import fr.bebedlastreat.discord.velocity.commands.VelocityClaimBoostCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityLinkCommand;
@@ -109,6 +110,7 @@ public class DiscordSyncVelocity {
                 credentials.put("database", section.getString("database"));
                 credentials.put("table", section.getString("table"));
                 credentials.put("properties", section.getString("properties"));
+                credentials.put("driver", section.getString("driver", SqlHandler.DEFAULT_DRIVER));
                 break;
             }
         }

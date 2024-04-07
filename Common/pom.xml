@@ -129,10 +129,10 @@
                             <pattern>net.dv8tion</pattern>
                             <shadedPattern>fr.bebedlastreat.discord.shaded</shadedPattern>
                         </relocation>
-                        <relocation>
+                        <!--<relocation>
                             <pattern>com.mysql</pattern>
                             <shadedPattern>fr.bebedlastreat.discord.shaded.mysql</shadedPattern>
-                        </relocation>
+                        </relocation>-->
                         <!--<relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>fr.bebedlastreat.discord.shaded.bstats</shadedPattern>

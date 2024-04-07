@@ -10,15 +10,17 @@ public class SqlCredentials {
     private final String dbName;
     private final int port;
     private final String properties;
+    private final String driver;
 
 
-    public SqlCredentials(String host, String user, String pass, String dbName, int port, String properties) {
+    public SqlCredentials(String host, String user, String pass, String dbName, int port, String properties, String driver) {
         this.host = host;
         this.user = user;
         this.pass = pass;
         this.dbName = dbName;
         this.port = port;
         this.properties = properties;
+        this.driver = driver;
     }
 
     public String toUrl() {

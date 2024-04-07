@@ -117,7 +117,7 @@ public class DiscordCommon {
         switch (databaseType) {
             case SQL: {
                 sqlHandler = new SqlHandler(
-                        new SqlCredentials((String) credentials.get("ip"), (String) credentials.get("user"), (String) credentials.get("password"), (String) credentials.get("database"), (int) credentials.get("port"), (String) credentials.get("properties")),
+                        new SqlCredentials((String) credentials.get("ip"), (String) credentials.get("user"), (String) credentials.get("password"), (String) credentials.get("database"), (int) credentials.get("port"), (String) credentials.get("properties"), (String) credentials.get("driver")),
                         10, 10, 1800000, 0, 5000, (String) credentials.get("table")
                 );
                 sqlHandler.createDefault();

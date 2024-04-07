@@ -21,7 +21,11 @@ public class DiscordVelocityPluginMessage {
         out.writeBoolean(boost);
 
         Optional<ServerConnection> currentServer = player.getCurrentServer();
-        currentServer.ifPresent(serverConnection -> serverConnection.sendPluginMessage(MinecraftChannelIdentifier.from(DiscordCommon.PLUGIN_CHANNEL), out.toByteArray()));
+        currentServer.ifPresent(serverConnection -> {
+            try {
+                serverConnection.sendPluginMessage(MinecraftChannelIdentifier.from(DiscordCommon.PLUGIN_CHANNEL), out.toByteArray());
+            } catch (Exception ignore) {}
+        });
     }
 
     public void sendData(Player player) {

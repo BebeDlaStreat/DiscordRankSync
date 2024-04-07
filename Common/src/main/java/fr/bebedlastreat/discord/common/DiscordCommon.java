@@ -40,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -245,8 +246,12 @@ public class DiscordCommon {
     }
 
     public DiscordMember getMember(String id) {
-        Member member = guild.retrieveMemberById(id).complete();
-        return new DiscordMember(id, member.getEffectiveName(), member.isBoosting());
+        try {
+            Member member = guild.retrieveMemberById(id).complete();
+            return new DiscordMember(id, member.getEffectiveName(), member.isBoosting());
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     public void getData(ICommonPlayer<?> player, PlayerDataCallback callback) {
@@ -256,8 +261,10 @@ public class DiscordCommon {
         boolean boosting = false;
         if (linked) {
             DiscordMember member = DiscordCommon.getInstance().getMember(discord);
-            name = member.getEffectiveName();
-            boosting = member.isBoosting();
+            if (member != null) {
+                name = member.getEffectiveName();
+                boosting = member.isBoosting();
+            }
         }
         callback.execute(linked, name, boosting);
     }

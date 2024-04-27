@@ -16,7 +16,9 @@ public class DiscordPapi {
     private int memberCount;
 
     public void init() {
-        memberCount =  DiscordCommon.getInstance().getGuild().retrieveMetaData().map(metaData -> metaData.getApproximateMembers()).complete();
+        if (!DiscordCommon.getInstance().isStandalone()) {
+            memberCount =  DiscordCommon.getInstance().getGuild().retrieveMetaData().map(metaData -> metaData.getApproximateMembers()).complete();
+        }
         new DiscordPlaceHolderExpansion(DiscordSyncBukkit.getInstance(), DiscordCommon.getInstance()).register();
         if (!DiscordCommon.getInstance().isStandalone()) {
             Bukkit.getPluginManager().registerEvents(new PapiListener(DiscordCommon.getInstance()), DiscordSyncBukkit.getInstance());

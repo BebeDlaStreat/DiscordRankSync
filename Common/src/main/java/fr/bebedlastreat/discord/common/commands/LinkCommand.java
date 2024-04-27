@@ -8,6 +8,7 @@ import fr.bebedlastreat.discord.common.objects.WaitingLink;
 import fr.bebedlastreat.discord.redisbungee.RedisBungeeManager;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 public class LinkCommand implements ICommonCommand {
 
@@ -54,12 +55,16 @@ public class LinkCommand implements ICommonCommand {
                         if (common.isRedisBungee()) {
                             RedisBungeeManager.removeWaitingLink(s);
                         }
+                        DiscordCommon.getLogger().log(Level.INFO, "Player " + player.getName() + " linked with " + waitingLink.getDiscordId());
                         if (common.getDatabaseFetch().firstLink(player.getUniqueId())) {
+                            DiscordCommon.getLogger().log(Level.INFO, "Player " + player.getName() + " linked for the first time");
                             common.getDatabaseFetch().insertFirstLink(player.getUniqueId());
                             common.setAllTimeLinkCount(common.getAllTimeLinkCount() + 1);
                             common.getRunner().runLater(() -> {
+                                DiscordCommon.getLogger().log(Level.INFO, "Rewards: " + common.getRewardCommand());
                                 if (!common.getRewardCommand().isEmpty()) {
                                     for (String command : common.getRewardCommand()) {
+                                        DiscordCommon.getLogger().log(Level.INFO, "Executing command: " + command.replace("{player}", player.getName()));
                                         common.getConsoleExecutor().execute(command.replace("{player}", player.getName()));
                                     }
                                 }

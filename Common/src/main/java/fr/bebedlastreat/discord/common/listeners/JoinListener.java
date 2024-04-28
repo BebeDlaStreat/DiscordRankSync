@@ -17,6 +17,7 @@ public class JoinListener implements ICommonListener {
         common.getRunner().runAsync(() -> {
             String discord = common.getDatabaseFetch().discord(player.getUniqueId());
             if (discord != null && discord.length() > 0) {
+                common.rename(discord, player.getName());
                 for (DiscordRank rank : common.getRanks()) {
                     if (player.hasPermission(rank.getPermission())) {
                         common.addRole(discord, rank);

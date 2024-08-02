@@ -10,6 +10,7 @@ import fr.bebedlastreat.discord.velocity.implementations.VelocityPlayer;
 import lombok.experimental.UtilityClass;
 
 import java.util.Optional;
+import java.util.logging.Level;
 
 @UtilityClass
 public class DiscordVelocityPluginMessage {
@@ -31,6 +32,21 @@ public class DiscordVelocityPluginMessage {
     public void sendData(Player player) {
         DiscordCommon.getInstance().getData(new VelocityPlayer(player), (linked, discordName, boosting) -> {
             DiscordVelocityPluginMessage.sendData(player, linked, discordName, boosting);
+        });
+    }
+
+
+    public void sendCommand(Player player, String command) {
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF(command);
+
+        Optional<ServerConnection> currentServer = player.getCurrentServer();
+        currentServer.ifPresent(serverConnection -> {
+            try {
+                serverConnection.sendPluginMessage(MinecraftChannelIdentifier.from(DiscordCommon.PLUGIN_CHANNEL), out.toByteArray());
+            } catch (Exception ignore) {
+                DiscordCommon.getLogger().log(Level.WARNING, "Can't dispatch command for " + player.getUsername() + " -> /" + command);
+            }
         });
     }
 }

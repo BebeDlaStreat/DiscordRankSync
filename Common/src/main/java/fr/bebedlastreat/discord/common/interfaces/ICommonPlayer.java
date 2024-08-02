@@ -11,4 +11,6 @@ public interface ICommonPlayer <T> {
     String getName();
 
     boolean hasPermission(String permission);
+
+    T getPlayer();
 }

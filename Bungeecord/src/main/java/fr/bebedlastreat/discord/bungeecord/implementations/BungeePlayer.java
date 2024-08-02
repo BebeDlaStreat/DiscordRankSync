@@ -35,4 +35,9 @@ public class BungeePlayer implements ICommonPlayer<ProxiedPlayer> {
     public boolean hasPermission(String permission) {
         return player.hasPermission(permission);
     }
+
+    @Override
+    public ProxiedPlayer getPlayer() {
+        return player;
+    }
 }

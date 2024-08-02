@@ -9,6 +9,8 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 
+import java.util.logging.Level;
+
 @UtilityClass
 public class DiscordBungeePluginMessage {
 
@@ -31,5 +33,19 @@ public class DiscordBungeePluginMessage {
         DiscordCommon.getInstance().getData(new BungeePlayer(player), (linked, discordName, boosting) -> {
             DiscordBungeePluginMessage.sendData(player, linked, discordName, boosting);
         });
+    }
+
+    public void sendCommand(ProxiedPlayer player, String command) {
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF(command);
+        Server server = player.getServer();
+        if (server != null) {
+            ServerInfo info = server.getInfo();
+            if (info != null) {
+                player.getServer().getInfo().sendData(DiscordCommon.PLUGIN_CHANNEL, out.toByteArray());
+            }
+        } else {
+            DiscordCommon.getLogger().log(Level.WARNING, "Can't dispatch command for " + player.getName() + " -> /" + command);
+        }
     }
 }

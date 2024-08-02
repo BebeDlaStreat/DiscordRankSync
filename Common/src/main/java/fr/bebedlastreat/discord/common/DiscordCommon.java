@@ -51,6 +51,7 @@ public class DiscordCommon {
     private static DiscordCommon instance;
     public static final int METRICS_ID = 19271;
     public static final String PLUGIN_CHANNEL = "discordranksync:data";
+    public static final String COMMAND_CHANNEL = "discordranksync:command";
 
     private final String token;
     private final String guildId;

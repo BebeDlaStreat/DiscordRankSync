@@ -35,7 +35,7 @@ public class ClaimBoostCommand implements ICommonCommand {
                     common.getDatabaseFetch().insertBoost(player.getUniqueId(), System.currentTimeMillis() + (1000L*60*60*24*YearMonth.now().lengthOfMonth()));
                     common.getRunner().runLater(() -> {
                         for (String command : common.getBoostReward()) {
-                            common.getConsoleExecutor().execute(command.replace("{player}", player.getName()));
+                            common.getConsoleExecutor().execute(command.replace("{player}", player.getName()), player);
                         }
                     }, 0);
 

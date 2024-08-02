@@ -65,7 +65,7 @@ public class LinkCommand implements ICommonCommand {
                                 if (!common.getRewardCommand().isEmpty()) {
                                     for (String command : common.getRewardCommand()) {
                                         DiscordCommon.getLogger().log(Level.INFO, "Executing command: " + command.replace("{player}", player.getName()));
-                                        common.getConsoleExecutor().execute(command.replace("{player}", player.getName()));
+                                        common.getConsoleExecutor().execute(command.replace("{player}", player.getName()), player);
                                     }
                                 }
                             }, 0);

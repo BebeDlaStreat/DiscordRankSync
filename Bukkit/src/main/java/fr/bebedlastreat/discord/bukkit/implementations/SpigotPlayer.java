@@ -35,4 +35,9 @@ public class SpigotPlayer implements ICommonPlayer<Player> {
     public boolean hasPermission(String permission) {
         return player.hasPermission(permission);
     }
+
+    @Override
+    public Player getPlayer() {
+        return player;
+    }
 }

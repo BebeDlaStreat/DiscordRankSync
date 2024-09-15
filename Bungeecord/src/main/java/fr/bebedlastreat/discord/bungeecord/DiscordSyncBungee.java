@@ -109,10 +109,18 @@ public class DiscordSyncBungee extends Plugin {
             DiscordCommon.getLogger().log(Level.INFO, "Configurating the bot...");
             try {
                 common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages,
-                        new BungeeOnlineCheck(), new BungeeRunner(), new BungeeConsoleExecutor(),
-                        ServerType.BUNGEECORD, config.getStringList("reward-command"), config.getStringList("boost-reward"), config.getString("date-format"),
+                        new BungeeOnlineCheck(),
+                        new BungeeRunner(),
+                        new BungeeConsoleExecutor(),
+                        ServerType.BUNGEECORD,
+                        config.getBoolean("one-time-reward", true),
+                        config.getStringList("reward-command"),
+                        config.getStringList("unlink-command"),
+                        config.getStringList("boost-reward"),
+                        config.getString("date-format"),
                         new DiscordActivity(config.getBoolean("activity.enable", false), config.getString("activity.type", "PLAYING"),config.getString("activity.message", "DiscordRankSync")),
-                        config.getInt("join-message-delay", 0), config.getInt("refresh-delay", 30));
+                        config.getInt("join-message-delay", 0),
+                        config.getInt("refresh-delay", 30));
 
                 PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
                 registerCommands(pluginManager);

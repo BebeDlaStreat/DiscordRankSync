@@ -8,7 +8,7 @@ import fr.bebedlastreat.discord.velocity.utils.DiscordVelocityPluginMessage;
 public class VelocityConsoleExecutor implements IConsoleExecutor {
     @Override
     public void execute(String command, ICommonPlayer<?> target) {
-        if (command.startsWith("[FORWARD] ")) {
+        if (command.startsWith("[FORWARD] ") && target != null) {
             command = command.substring(10);
             DiscordVelocityPluginMessage.sendCommand(((VelocityPlayer) target).getPlayer(), command);
         } else {

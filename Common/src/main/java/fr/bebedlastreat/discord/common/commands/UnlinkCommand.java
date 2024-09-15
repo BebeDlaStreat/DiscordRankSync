@@ -6,6 +6,8 @@ import fr.bebedlastreat.discord.common.interfaces.ICommonCommandSender;
 import fr.bebedlastreat.discord.common.interfaces.ICommonPlayer;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 
+import java.util.logging.Level;
+
 public class UnlinkCommand implements ICommonCommand {
 
     private final DiscordCommon common;
@@ -30,6 +32,13 @@ public class UnlinkCommand implements ICommonCommand {
 
             common.getDatabaseFetch().delete(player.getUniqueId());
             common.setLinkCount(common.getLinkCount() - 1);
+
+            if (!common.getUnlinkCommandList().isEmpty()) {
+                for (String command : common.getUnlinkCommandList()) {
+                    common.getConsoleExecutor().execute(command.replace("{player}", player.getName()).replace("{uuid}", player.getUniqueId().toString()), player);
+                }
+            }
+
             common.getRunner().run(() -> {
                 player.sendMessage(common.getMessages().get("unlink-success"));
             });

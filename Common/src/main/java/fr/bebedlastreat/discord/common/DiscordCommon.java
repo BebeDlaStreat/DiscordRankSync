@@ -75,7 +75,9 @@ public class DiscordCommon {
     private final ServerType serverType;
     private int linkCount = 0;
     private int allTimeLinkCount = 0;
+    private final boolean oneTimeReward;
     private final List<String> rewardCommand;
+    private final List<String> unlinkCommandList;
     private final List<String> boostReward;
     private final SimpleDateFormat sdf;
     private final DiscordActivity activity;
@@ -90,7 +92,25 @@ public class DiscordCommon {
     @Setter
     private static IDiscordLogger logger = new DefaultLogger(Logger.getLogger("DiscordRankSync"));
 
-    public DiscordCommon(String token, String guildId, boolean rename, DatabaseType databaseType, List<DiscordRank> ranks, Map<String, Object> credentials, Map<String, String> messages, IOnlineCheck onlineCheck, ICommonRunner runner, IConsoleExecutor consoleExecutor, ServerType serverType, List<String> rewardCommand, List<String> boostReward, String dataFormat, DiscordActivity activity, int joinMessageDelay, int refreshDelay) throws InterruptedException {
+    public DiscordCommon(String token,
+                         String guildId,
+                         boolean rename,
+                         DatabaseType databaseType,
+                         List<DiscordRank> ranks,
+                         Map<String, Object> credentials,
+                         Map<String, String> messages,
+                         IOnlineCheck onlineCheck,
+                         ICommonRunner runner,
+                         IConsoleExecutor consoleExecutor,
+                         ServerType serverType,
+                         boolean oneTimeReward,
+                         List<String> rewardCommand,
+                         List<String> unlinkCommandList,
+                         List<String> boostReward,
+                         String dataFormat,
+                         DiscordActivity activity,
+                         int joinMessageDelay,
+                         int refreshDelay) throws InterruptedException {
         this.token = token;
         this.guildId = guildId;
         this.rename = rename;
@@ -99,7 +119,9 @@ public class DiscordCommon {
         this.runner = runner;
         this.consoleExecutor = consoleExecutor;
         this.serverType = serverType;
+        this.oneTimeReward = oneTimeReward;
         this.rewardCommand = rewardCommand;
+        this.unlinkCommandList = unlinkCommandList;
         this.boostReward = boostReward;
         this.sdf = new SimpleDateFormat(dataFormat);
         this.activity = activity;

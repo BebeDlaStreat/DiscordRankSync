@@ -126,10 +126,18 @@ public class DiscordSyncVelocity {
             DiscordCommon.getLogger().log(Level.INFO, "Configurating the bot...");
             try {
                 common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages,
-                        new VelocityOnlineCheck(), new VelocityRunner(), new VelocityConsoleExecutor(),
-                        ServerType.VELOCITY, config.getListString("reward-command"), config.getListString("boost-reward"), config.getString("date-format"),
+                        new VelocityOnlineCheck(),
+                        new VelocityRunner(),
+                        new VelocityConsoleExecutor(),
+                        ServerType.VELOCITY,
+                        config.getBoolean("one-time-reward", true),
+                        config.getListString("reward-command"),
+                        config.getListString("unlink-command"),
+                        config.getListString("boost-reward"),
+                        config.getString("date-format"),
                         new DiscordActivity(config.getBoolean("activity.enable", false), config.getString("activity.type", "PLAYING"), config.getString("activity.message", "DiscordRankSync")),
-                        config.getInteger("join-message-delay", 0), config.getInteger("refresh-delay", 30));
+                        config.getInteger("join-message-delay", 0),
+                        config.getInteger("refresh-delay", 30));
 
                 EventManager eventManager = server.getEventManager();
                 CommandManager commandManager = server.getCommandManager();

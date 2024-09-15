@@ -56,16 +56,20 @@ public class LinkCommand implements ICommonCommand {
                             RedisBungeeManager.removeWaitingLink(s);
                         }
                         DiscordCommon.getLogger().log(Level.INFO, "Player " + player.getName() + " linked with " + waitingLink.getDiscordId());
-                        if (common.getDatabaseFetch().firstLink(player.getUniqueId())) {
+                        boolean firstLink = common.getDatabaseFetch().firstLink(player.getUniqueId());
+                        boolean oneTimeReward = common.isOneTimeReward();
+                        if (firstLink) {
                             DiscordCommon.getLogger().log(Level.INFO, "Player " + player.getName() + " linked for the first time");
                             common.getDatabaseFetch().insertFirstLink(player.getUniqueId());
                             common.setAllTimeLinkCount(common.getAllTimeLinkCount() + 1);
+                        }
+                        if (firstLink || !oneTimeReward) {
                             common.getRunner().runLater(() -> {
                                 DiscordCommon.getLogger().log(Level.INFO, "Rewards: " + common.getRewardCommand());
                                 if (!common.getRewardCommand().isEmpty()) {
                                     for (String command : common.getRewardCommand()) {
-                                        DiscordCommon.getLogger().log(Level.INFO, "Executing command: " + command.replace("{player}", player.getName()));
-                                        common.getConsoleExecutor().execute(command.replace("{player}", player.getName()), player);
+                                        //DiscordCommon.getLogger().log(Level.INFO, "Executing command: " + command.replace("{player}", player.getName()).replace("{uuid}", player.getUniqueId().toString()));
+                                        common.getConsoleExecutor().execute(command.replace("{player}", player.getName()).replace("{uuid}", player.getUniqueId().toString()), player);
                                     }
                                 }
                             }, 0);

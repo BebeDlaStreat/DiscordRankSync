@@ -96,10 +96,18 @@ public class DiscordSyncBukkit extends JavaPlugin {
             DiscordCommon.getLogger().log(Level.INFO, "Configurating the bot...");
             try {
                 common = new DiscordCommon(token, guildId, rename, databaseType, ranks, credentials, messages,
-                        new SpigotOnlineCheck(), new SpigotRunner(), new SpigotConsoleExecutor(),
-                        ServerType.SPIGOT, getConfig().getStringList("reward-command"), getConfig().getStringList("boost-reward"), getConfig().getString("date-format"),
+                        new SpigotOnlineCheck(),
+                        new SpigotRunner(),
+                        new SpigotConsoleExecutor(),
+                        ServerType.SPIGOT,
+                        getConfig().getBoolean("one-time-reward", true),
+                        getConfig().getStringList("reward-command"),
+                        getConfig().getStringList("unlink-command"),
+                        getConfig().getStringList("boost-reward"),
+                        getConfig().getString("date-format"),
                         new DiscordActivity(getConfig().getBoolean("activity.enable", false), getConfig().getString("activity.type", "PLAYING"), getConfig().getString("activity.message", "DiscordRankSync")),
-                        getConfig().getInt("join-message-delay", 0), getConfig().getInt("refresh-delay", 30));
+                        getConfig().getInt("join-message-delay", 0),
+                        getConfig().getInt("refresh-delay", 30));
 
                 boolean standalone = getConfig().getBoolean("standalone", false);
 

@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import java.awt.*;
 import java.util.Random;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class SlashCommandListener extends ListenerAdapter {
 
@@ -86,6 +87,20 @@ public class SlashCommandListener extends ListenerAdapter {
                 e.replyEmbeds(new EmbedBuilder().setTitle(common.getMessages().get("error")).setDescription(common.getMessages().get("no-link-minecraft")).setColor(Color.RED).build()).setEphemeral(true).queue();
                 return;
             }
+            try {
+                String uuid = common.getDatabaseFetch().uuid(user.getId());
+                String name = common.getDatabaseFetch().name(UUID.fromString(uuid));
+
+                if (!common.getUnlinkCommandList().isEmpty()) {
+                    for (String command : common.getUnlinkCommandList()) {
+                        common.getConsoleExecutor().execute(command.replace("{player}", name).replace("{uuid}", uuid), null);
+                    }
+                }
+            } catch (Exception ex) {
+                DiscordCommon.getLogger().log(Level.SEVERE, "Can't fetch minecraft user data from discord user " + user.getId());
+                ex.printStackTrace();
+            }
+
             common.getDatabaseFetch().delete(user.getId());
             common.setLinkCount(common.getLinkCount() - 1);
             common.getRunner().runAsync(() -> {

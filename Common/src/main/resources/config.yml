@@ -20,7 +20,11 @@ refresh-delay: 30
 
 database: "MariaDB" # Currently only MariaDB is supported but I will include later MongoDB support if it is requested (sql is better for use of this plugin)
 
-reward-command: [] # command executed when a player links his account for the first time (user {player} as placeholder for player name)
+
+one-time-reward: true # if enabled, reward-command will only be executed once on first time link
+reward-command: [] # command executed when a player links his account (use {player} as placeholder for player name), warning it's a list: ["command1", "command2"]
+
+unlink-command: [] # command to execute when a player unlink
 
 boost-reward: [] # command to execute when a player with boost rank execute /claimboost, can be executed every months
 

@@ -43,7 +43,7 @@ public class DiscordVelocityPluginMessage {
         Optional<ServerConnection> currentServer = player.getCurrentServer();
         currentServer.ifPresent(serverConnection -> {
             try {
-                serverConnection.sendPluginMessage(MinecraftChannelIdentifier.from(DiscordCommon.PLUGIN_CHANNEL), out.toByteArray());
+                serverConnection.sendPluginMessage(MinecraftChannelIdentifier.from(DiscordCommon.COMMAND_CHANNEL), out.toByteArray());
             } catch (Exception ignore) {
                 DiscordCommon.getLogger().log(Level.WARNING, "Can't dispatch command for " + player.getUsername() + " -> /" + command);
             }

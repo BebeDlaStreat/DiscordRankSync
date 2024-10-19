@@ -121,6 +121,7 @@ public class DiscordSyncBukkit extends JavaPlugin {
                     common.getJda().shutdown();
                     common.setStandalone(true);
                     getServer().getMessenger().registerIncomingPluginChannel(this, DiscordCommon.PLUGIN_CHANNEL, new DiscordPluginMessageListener());
+                    getServer().getMessenger().registerIncomingPluginChannel(this, DiscordCommon.COMMAND_CHANNEL, new DiscordPluginMessageListener());
                 }
 
                 Bukkit.getScheduler().runTask(this, () -> {

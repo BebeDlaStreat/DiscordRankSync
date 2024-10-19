@@ -86,6 +86,7 @@ public class DiscordSyncVelocity {
         saveDefaultConfig();
 
         server.getChannelRegistrar().register(MinecraftChannelIdentifier.from(DiscordCommon.PLUGIN_CHANNEL));
+        server.getChannelRegistrar().register(MinecraftChannelIdentifier.from(DiscordCommon.COMMAND_CHANNEL));
 
         String token = getConfig().getString("bot-token");
         String guildId = getConfig().getString("guild-id");

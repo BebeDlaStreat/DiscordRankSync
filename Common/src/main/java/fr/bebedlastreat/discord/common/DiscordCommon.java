@@ -218,7 +218,13 @@ public class DiscordCommon {
         if (member == null) return;
         if (member.getRoles().contains(rank.getRole())) return;
         try {
-            guild.addRoleToMember(member, rank.getRole()).queue();
+            guild.addRoleToMember(member, rank.getRole()).queue(
+                    (success) -> {
+
+                    }, (throwable) -> {
+                        logger.log(Level.WARNING, "error when adding roles of " + discordId + ": " + throwable.getMessage());
+                    }
+            );
         } catch (InsufficientPermissionException | HierarchyException ex) {
             if (ex instanceof InsufficientPermissionException) {
                 logger.log(Level.WARNING, "the bot has not the permission to manage roles");
@@ -238,7 +244,13 @@ public class DiscordCommon {
         if (member == null) return;
         if (!member.getRoles().contains(rank.getRole())) return;
         try {
-            guild.removeRoleFromMember(member, rank.getRole()).queue();
+            guild.removeRoleFromMember(member, rank.getRole()).queue(
+                    (success) -> {
+
+                    }, (throwable) -> {
+                        logger.log(Level.WARNING, "error when removing roles of " + discordId + ": " + throwable.getMessage());
+                    }
+            );
         } catch (InsufficientPermissionException | HierarchyException ex) {
             if (ex instanceof InsufficientPermissionException) {
                 logger.log(Level.WARNING, "the bot has not the permission to manage roles");
@@ -258,7 +270,13 @@ public class DiscordCommon {
         Member member = guild.retrieveMemberById(discordId).complete();
         if (member == null) return;
         try {
-            member.modifyNickname(name).queue();
+            member.modifyNickname(name).queue(
+                    (success) -> {
+
+                    }, (throwable) -> {
+                        logger.log(Level.WARNING, "error when renaming " + discordId + ": " + throwable.getMessage());
+                    }
+            );
         } catch (InsufficientPermissionException | HierarchyException ex) {
             if (ex instanceof InsufficientPermissionException) {
                 logger.log(Level.WARNING, "the bot has not the permission to rename a user");

@@ -69,6 +69,7 @@ public class DiscordSyncBungee extends Plugin {
         this.adventure = BungeeAudiences.create(this);
 
         getProxy().registerChannel(DiscordCommon.PLUGIN_CHANNEL);
+        getProxy().registerChannel(DiscordCommon.COMMAND_CHANNEL);
 
         String token = getConfig().getString("bot-token");
         String guildId = getConfig().getString("guild-id");

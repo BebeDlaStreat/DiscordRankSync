@@ -83,6 +83,7 @@ public class DiscordCommon {
     private final DiscordActivity activity;
     private final int joinMessageDelay;
     private final int refreshDelay;
+    private final int boostDelay;
 
     private boolean standalone = false;
     private boolean redisBungee = false;
@@ -110,7 +111,8 @@ public class DiscordCommon {
                          String dataFormat,
                          DiscordActivity activity,
                          int joinMessageDelay,
-                         int refreshDelay) throws InterruptedException {
+                         int refreshDelay,
+                         int boostDelay) throws InterruptedException {
         this.token = token;
         this.guildId = guildId;
         this.rename = rename;
@@ -127,6 +129,7 @@ public class DiscordCommon {
         this.activity = activity;
         this.joinMessageDelay = joinMessageDelay;
         this.refreshDelay = Math.min(1, refreshDelay);
+        this.boostDelay = Math.min(1, boostDelay);
         instance = this;
         this.databaseType = databaseType;
         this.credentials = credentials;

@@ -121,7 +121,8 @@ public class DiscordSyncBungee extends Plugin {
                         config.getString("date-format"),
                         new DiscordActivity(config.getBoolean("activity.enable", false), config.getString("activity.type", "PLAYING"),config.getString("activity.message", "DiscordRankSync")),
                         config.getInt("join-message-delay", 0),
-                        config.getInt("refresh-delay", 30));
+                        config.getInt("refresh-delay", 30),
+                        config.getInt("boost-delay", -1));
 
                 PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
                 registerCommands(pluginManager);

@@ -32,7 +32,11 @@ public class ClaimBoostCommand implements ICommonCommand {
             if (member.isBoosting()) {
                 if (common.getDatabaseFetch().canBoost(player.getUniqueId())) {
                     common.getDatabaseFetch().deleteBoost(player.getUniqueId());
-                    common.getDatabaseFetch().insertBoost(player.getUniqueId(), System.currentTimeMillis() + (1000L*60*60*24*YearMonth.now().lengthOfMonth()));
+                    if (common.getBoostDelay() == -1) {
+                        common.getDatabaseFetch().insertBoost(player.getUniqueId(), System.currentTimeMillis() + (1000L*60*60*24*YearMonth.now().lengthOfMonth()));
+                    } else {
+                        common.getDatabaseFetch().insertBoost(player.getUniqueId(), System.currentTimeMillis() + (1000L*60*60*24*common.getBoostDelay()));
+                    }
                     common.getRunner().runLater(() -> {
                         for (String command : common.getBoostReward()) {
                             common.getConsoleExecutor().execute(command.replace("{player}", player.getName()).replace("{uuid}", player.getUniqueId().toString()), player);

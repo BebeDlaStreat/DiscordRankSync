@@ -107,7 +107,8 @@ public class DiscordSyncBukkit extends JavaPlugin {
                         getConfig().getString("date-format"),
                         new DiscordActivity(getConfig().getBoolean("activity.enable", false), getConfig().getString("activity.type", "PLAYING"), getConfig().getString("activity.message", "DiscordRankSync")),
                         getConfig().getInt("join-message-delay", 0),
-                        getConfig().getInt("refresh-delay", 30));
+                        getConfig().getInt("refresh-delay", 30),
+                        getConfig().getInt("boost-delay", -1));
 
                 boolean standalone = getConfig().getBoolean("standalone", false);
 

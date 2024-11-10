@@ -138,7 +138,8 @@ public class DiscordSyncVelocity {
                         config.getString("date-format"),
                         new DiscordActivity(config.getBoolean("activity.enable", false), config.getString("activity.type", "PLAYING"), config.getString("activity.message", "DiscordRankSync")),
                         config.getInteger("join-message-delay", 0),
-                        config.getInteger("refresh-delay", 30));
+                        config.getInteger("refresh-delay", 30),
+                        config.getInteger("boost-delay", -1));
 
                 EventManager eventManager = server.getEventManager();
                 CommandManager commandManager = server.getCommandManager();

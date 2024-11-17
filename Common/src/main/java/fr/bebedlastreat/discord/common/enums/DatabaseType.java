@@ -1,7 +1,9 @@
 package fr.bebedlastreat.discord.common.enums;
 
 public enum DatabaseType {
-    SQL;
+    SQL,
+    SQLITE,
+    ;
 
     public static DatabaseType getByName(String name) {
         switch (name.toLowerCase()) {
@@ -9,6 +11,9 @@ public enum DatabaseType {
             case "mariadb":
             case "mysql": {
                 return DatabaseType.SQL;
+            }
+            case "sqlite": {
+                return DatabaseType.SQLITE;
             }
         }
         return null;

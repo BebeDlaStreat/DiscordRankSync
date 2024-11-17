@@ -18,7 +18,7 @@ activity:
 # delay for plugin message/placeholder api refresh
 refresh-delay: 30
 
-database: "MariaDB" # Currently only MariaDB is supported but I will include later MongoDB support if it is requested (sql is better for use of this plugin)
+database: "SQLite" # Currently only MariaDB is supported but I will include later MongoDB support if it is requested (sql is better for use of this plugin)
 
 
 one-time-reward: true # if enabled, reward-command will only be executed once on first time link
@@ -45,6 +45,11 @@ sql:
   table: "discord_sync" # the table of the table used to store, automatically created
   properties: "?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8"
   driver: "com.mysql.jdbc.Driver"
+
+sqlite:
+  file: "discordranksync.db"
+  table: "discord_sync"
+  driver: "org.sqlite.JDBC"
 
 # warning: no legacy color support, you must use minimessage format: https://docs.advntr.dev/minimessage/format.html)
 messages:

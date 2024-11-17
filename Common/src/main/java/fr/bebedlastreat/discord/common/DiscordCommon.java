@@ -18,6 +18,9 @@ import fr.bebedlastreat.discord.common.objects.WaitingLink;
 import fr.bebedlastreat.discord.common.sql.SqlCredentials;
 import fr.bebedlastreat.discord.common.sql.SqlFetch;
 import fr.bebedlastreat.discord.common.sql.SqlHandler;
+import fr.bebedlastreat.discord.common.sqlite.SQLiteCredentials;
+import fr.bebedlastreat.discord.common.sqlite.SQLiteFetch;
+import fr.bebedlastreat.discord.common.sqlite.SQLiteHandler;
 import fr.bebedlastreat.discord.redisbungee.RedisBungeeManager;
 import lombok.Data;
 import lombok.Getter;
@@ -36,6 +39,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -83,11 +87,11 @@ public class DiscordCommon {
     private final DiscordActivity activity;
     private final int joinMessageDelay;
     private final int refreshDelay;
+    private final File dataFolder;
 
     private boolean standalone = false;
     private boolean redisBungee = false;
 
-    private SqlHandler sqlHandler;
     @Getter
     @Setter
     private static IDiscordLogger logger = new DefaultLogger(Logger.getLogger("DiscordRankSync"));
@@ -110,7 +114,8 @@ public class DiscordCommon {
                          String dataFormat,
                          DiscordActivity activity,
                          int joinMessageDelay,
-                         int refreshDelay) throws InterruptedException {
+                         int refreshDelay,
+                         File dataFolder) throws InterruptedException {
         this.token = token;
         this.guildId = guildId;
         this.rename = rename;
@@ -127,6 +132,7 @@ public class DiscordCommon {
         this.activity = activity;
         this.joinMessageDelay = joinMessageDelay;
         this.refreshDelay = Math.min(1, refreshDelay);
+        this.dataFolder = dataFolder;
         instance = this;
         this.databaseType = databaseType;
         this.credentials = credentials;
@@ -139,12 +145,21 @@ public class DiscordCommon {
 
         switch (databaseType) {
             case SQL: {
-                sqlHandler = new SqlHandler(
+                SqlHandler sqlHandler = new SqlHandler(
                         new SqlCredentials((String) credentials.get("ip"), (String) credentials.get("user"), (String) credentials.get("password"), (String) credentials.get("database"), (int) credentials.get("port"), (String) credentials.get("properties"), (String) credentials.get("driver")),
                         10, 10, 1800000, 0, 5000, (String) credentials.get("table")
                 );
                 sqlHandler.createDefault();
                 databaseFetch = new SqlFetch(sqlHandler);
+                break;
+            }
+            case SQLITE: {
+                SQLiteHandler sqLiteHandler = new SQLiteHandler(
+                        new SQLiteCredentials(new File(dataFolder, (String) credentials.get("file")), (String) credentials.get("driver")),
+                        (String) credentials.get("table")
+                );
+                sqLiteHandler.createDefault();
+                databaseFetch = new SQLiteFetch(sqLiteHandler);
                 break;
             }
             default: {

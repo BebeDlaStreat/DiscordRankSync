@@ -28,8 +28,8 @@ public class ClaimBoostCommand implements ICommonCommand {
                 return;
             }
             String discord = common.getDatabaseFetch().discord(player.getUniqueId());
-            Member member = common.getGuild().retrieveMemberById(discord).complete();
-            if (member.isBoosting()) {
+            Member member = common.getGuild().retrieveMemberById(discord).onErrorMap((error) -> null).complete();
+            if (member != null && member.isBoosting()) {
                 if (common.getDatabaseFetch().canBoost(player.getUniqueId())) {
                     common.getDatabaseFetch().deleteBoost(player.getUniqueId());
                     if (common.getBoostDelay() == -1) {

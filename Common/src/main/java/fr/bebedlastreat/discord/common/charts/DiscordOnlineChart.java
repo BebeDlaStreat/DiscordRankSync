@@ -7,7 +7,7 @@ import org.bstats.charts.SingleLineChart;
 public class DiscordOnlineChart extends SingleLineChart {
     public DiscordOnlineChart() {
         super("discord_online", () -> {
-            return DiscordCommon.getInstance().getGuild().retrieveMetaData().map(Guild.MetaData::getApproximatePresences).complete();
+            return DiscordCommon.getInstance().getGuild().retrieveMetaData().map(Guild.MetaData::getApproximatePresences).onErrorMap((error) -> 0).complete();
         });
     }
 }

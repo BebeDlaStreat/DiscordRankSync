@@ -7,7 +7,7 @@ import org.bstats.charts.SingleLineChart;
 public class DiscordCountChart extends SingleLineChart {
     public DiscordCountChart() {
         super("discord_count", () -> {
-            return DiscordCommon.getInstance().getGuild().retrieveMetaData().map(Guild.MetaData::getApproximateMembers).complete();
+            return DiscordCommon.getInstance().getGuild().retrieveMetaData().map(Guild.MetaData::getApproximateMembers).onErrorMap((error) -> 0).complete();
         });
     }
 }

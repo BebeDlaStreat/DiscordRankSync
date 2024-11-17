@@ -229,7 +229,7 @@ public class DiscordCommon {
             return;
         }
         if (rank.getRole() == null) return;
-        Member member = guild.retrieveMemberById(discordId).complete();
+        Member member = guild.retrieveMemberById(discordId).onErrorMap((error) -> null).complete();
         if (member == null) return;
         if (member.getRoles().contains(rank.getRole())) return;
         try {
@@ -255,7 +255,7 @@ public class DiscordCommon {
             return;
         }
         if (rank.getRole() == null) return;
-        Member member = guild.retrieveMemberById(discordId).complete();
+        Member member = guild.retrieveMemberById(discordId).onErrorMap((error) -> null).complete();
         if (member == null) return;
         if (!member.getRoles().contains(rank.getRole())) return;
         try {
@@ -282,7 +282,7 @@ public class DiscordCommon {
         }
         if (!rename) return;
         if (guild == null) return;
-        Member member = guild.retrieveMemberById(discordId).complete();
+        Member member = guild.retrieveMemberById(discordId).onErrorMap((error) -> null).complete();
         if (member == null) return;
         try {
             member.modifyNickname(name).queue(
@@ -303,7 +303,8 @@ public class DiscordCommon {
 
     public DiscordMember getMember(String id) {
         try {
-            Member member = guild.retrieveMemberById(id).complete();
+            Member member = guild.retrieveMemberById(id).onErrorMap((error) -> null).complete();
+            if (member == null) return null;
             return new DiscordMember(id, member.getEffectiveName(), member.isBoosting());
         } catch (Exception ex) {
             return null;

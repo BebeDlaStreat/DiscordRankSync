@@ -18,7 +18,6 @@ import fr.bebedlastreat.discord.bukkit.commands.SpigotStopbotCommand;
 import fr.bebedlastreat.discord.bukkit.implementations.SpigotRunner;
 import fr.bebedlastreat.discord.bukkit.papi.DiscordPapi;
 import fr.bebedlastreat.discord.common.sql.SqlHandler;
-import fr.bebedlastreat.discord.common.sqlite.SQLiteHandler;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -84,13 +83,6 @@ public class DiscordSyncBukkit extends JavaPlugin {
                 credentials.put("driver", section.getString("driver", SqlHandler.DEFAULT_DRIVER));
                 break;
             }
-            case SQLITE: {
-                ConfigurationSection section = getConfig().getConfigurationSection("sqlite");
-                credentials.put("file", section.getString("file"));
-                credentials.put("table", section.getString("table"));
-                credentials.put("driver", section.getString("driver", SQLiteHandler.DEFAULT_DRIVER));
-                break;
-            }
         }
 
         Map<String, String> messages = new HashMap<>();
@@ -116,7 +108,7 @@ public class DiscordSyncBukkit extends JavaPlugin {
                         new DiscordActivity(getConfig().getBoolean("activity.enable", false), getConfig().getString("activity.type", "PLAYING"), getConfig().getString("activity.message", "DiscordRankSync")),
                         getConfig().getInt("join-message-delay", 0),
                         getConfig().getInt("refresh-delay", 30),
-                        getDataFolder());
+                        getConfig().getInt("boost-delay", -1));
 
                 boolean standalone = getConfig().getBoolean("standalone", false);
 
@@ -130,6 +122,7 @@ public class DiscordSyncBukkit extends JavaPlugin {
                     common.getJda().shutdown();
                     common.setStandalone(true);
                     getServer().getMessenger().registerIncomingPluginChannel(this, DiscordCommon.PLUGIN_CHANNEL, new DiscordPluginMessageListener());
+                    getServer().getMessenger().registerIncomingPluginChannel(this, DiscordCommon.COMMAND_CHANNEL, new DiscordPluginMessageListener());
                 }
 
                 Bukkit.getScheduler().runTask(this, () -> {

@@ -18,7 +18,6 @@ import fr.bebedlastreat.discord.common.logger.DefaultLogger;
 import fr.bebedlastreat.discord.common.objects.DiscordActivity;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.common.sql.SqlHandler;
-import fr.bebedlastreat.discord.common.sqlite.SQLiteHandler;
 import fr.bebedlastreat.discord.redisbungee.RedisBungeeManager;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,6 +69,7 @@ public class DiscordSyncBungee extends Plugin {
         this.adventure = BungeeAudiences.create(this);
 
         getProxy().registerChannel(DiscordCommon.PLUGIN_CHANNEL);
+        getProxy().registerChannel(DiscordCommon.COMMAND_CHANNEL);
 
         String token = getConfig().getString("bot-token");
         String guildId = getConfig().getString("guild-id");
@@ -97,13 +97,6 @@ public class DiscordSyncBungee extends Plugin {
                 credentials.put("driver", section.getString("driver", SqlHandler.DEFAULT_DRIVER));
                 break;
             }
-            case SQLITE: {
-                Configuration section = getConfig().getSection("sqlite");
-                credentials.put("file", section.getString("file"));
-                credentials.put("table", section.getString("table"));
-                credentials.put("driver", section.getString("driver", SQLiteHandler.DEFAULT_DRIVER));
-                break;
-            }
         }
 
         Map<String, String> messages = new HashMap<>();
@@ -129,7 +122,7 @@ public class DiscordSyncBungee extends Plugin {
                         new DiscordActivity(config.getBoolean("activity.enable", false), config.getString("activity.type", "PLAYING"),config.getString("activity.message", "DiscordRankSync")),
                         config.getInt("join-message-delay", 0),
                         config.getInt("refresh-delay", 30),
-                        getDataFolder());
+                        config.getInt("boost-delay", -1));
 
                 PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
                 registerCommands(pluginManager);

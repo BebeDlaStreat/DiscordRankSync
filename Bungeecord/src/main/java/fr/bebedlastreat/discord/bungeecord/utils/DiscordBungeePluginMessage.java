@@ -42,7 +42,7 @@ public class DiscordBungeePluginMessage {
         if (server != null) {
             ServerInfo info = server.getInfo();
             if (info != null) {
-                player.getServer().getInfo().sendData(DiscordCommon.PLUGIN_CHANNEL, out.toByteArray());
+                player.getServer().getInfo().sendData(DiscordCommon.COMMAND_CHANNEL, out.toByteArray());
             }
         } else {
             DiscordCommon.getLogger().log(Level.WARNING, "Can't dispatch command for " + player.getName() + " -> /" + command);

@@ -18,9 +18,6 @@ import fr.bebedlastreat.discord.common.objects.WaitingLink;
 import fr.bebedlastreat.discord.common.sql.SqlCredentials;
 import fr.bebedlastreat.discord.common.sql.SqlFetch;
 import fr.bebedlastreat.discord.common.sql.SqlHandler;
-import fr.bebedlastreat.discord.common.sqlite.SQLiteCredentials;
-import fr.bebedlastreat.discord.common.sqlite.SQLiteFetch;
-import fr.bebedlastreat.discord.common.sqlite.SQLiteHandler;
 import fr.bebedlastreat.discord.redisbungee.RedisBungeeManager;
 import lombok.Data;
 import lombok.Getter;
@@ -39,7 +36,6 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -87,11 +83,12 @@ public class DiscordCommon {
     private final DiscordActivity activity;
     private final int joinMessageDelay;
     private final int refreshDelay;
-    private final File dataFolder;
+    private final int boostDelay;
 
     private boolean standalone = false;
     private boolean redisBungee = false;
 
+    private SqlHandler sqlHandler;
     @Getter
     @Setter
     private static IDiscordLogger logger = new DefaultLogger(Logger.getLogger("DiscordRankSync"));
@@ -115,7 +112,7 @@ public class DiscordCommon {
                          DiscordActivity activity,
                          int joinMessageDelay,
                          int refreshDelay,
-                         File dataFolder) throws InterruptedException {
+                         int boostDelay) throws InterruptedException {
         this.token = token;
         this.guildId = guildId;
         this.rename = rename;
@@ -132,7 +129,7 @@ public class DiscordCommon {
         this.activity = activity;
         this.joinMessageDelay = joinMessageDelay;
         this.refreshDelay = Math.min(1, refreshDelay);
-        this.dataFolder = dataFolder;
+        this.boostDelay = Math.min(1, boostDelay);
         instance = this;
         this.databaseType = databaseType;
         this.credentials = credentials;
@@ -145,21 +142,12 @@ public class DiscordCommon {
 
         switch (databaseType) {
             case SQL: {
-                SqlHandler sqlHandler = new SqlHandler(
+                sqlHandler = new SqlHandler(
                         new SqlCredentials((String) credentials.get("ip"), (String) credentials.get("user"), (String) credentials.get("password"), (String) credentials.get("database"), (int) credentials.get("port"), (String) credentials.get("properties"), (String) credentials.get("driver")),
                         10, 10, 1800000, 0, 5000, (String) credentials.get("table")
                 );
                 sqlHandler.createDefault();
                 databaseFetch = new SqlFetch(sqlHandler);
-                break;
-            }
-            case SQLITE: {
-                SQLiteHandler sqLiteHandler = new SQLiteHandler(
-                        new SQLiteCredentials(new File(dataFolder, (String) credentials.get("file")), (String) credentials.get("driver")),
-                        (String) credentials.get("table")
-                );
-                sqLiteHandler.createDefault();
-                databaseFetch = new SQLiteFetch(sqLiteHandler);
                 break;
             }
             default: {
@@ -233,7 +221,13 @@ public class DiscordCommon {
         if (member == null) return;
         if (member.getRoles().contains(rank.getRole())) return;
         try {
-            guild.addRoleToMember(member, rank.getRole()).queue();
+            guild.addRoleToMember(member, rank.getRole()).queue(
+                    (success) -> {
+
+                    }, (throwable) -> {
+                        logger.log(Level.WARNING, "error when adding roles of " + discordId + ": " + throwable.getMessage());
+                    }
+            );
         } catch (InsufficientPermissionException | HierarchyException ex) {
             if (ex instanceof InsufficientPermissionException) {
                 logger.log(Level.WARNING, "the bot has not the permission to manage roles");
@@ -253,7 +247,13 @@ public class DiscordCommon {
         if (member == null) return;
         if (!member.getRoles().contains(rank.getRole())) return;
         try {
-            guild.removeRoleFromMember(member, rank.getRole()).queue();
+            guild.removeRoleFromMember(member, rank.getRole()).queue(
+                    (success) -> {
+
+                    }, (throwable) -> {
+                        logger.log(Level.WARNING, "error when removing roles of " + discordId + ": " + throwable.getMessage());
+                    }
+            );
         } catch (InsufficientPermissionException | HierarchyException ex) {
             if (ex instanceof InsufficientPermissionException) {
                 logger.log(Level.WARNING, "the bot has not the permission to manage roles");
@@ -273,7 +273,13 @@ public class DiscordCommon {
         Member member = guild.retrieveMemberById(discordId).complete();
         if (member == null) return;
         try {
-            member.modifyNickname(name).queue();
+            member.modifyNickname(name).queue(
+                    (success) -> {
+
+                    }, (throwable) -> {
+                        logger.log(Level.WARNING, "error when renaming " + discordId + ": " + throwable.getMessage());
+                    }
+            );
         } catch (InsufficientPermissionException | HierarchyException ex) {
             if (ex instanceof InsufficientPermissionException) {
                 logger.log(Level.WARNING, "the bot has not the permission to rename a user");

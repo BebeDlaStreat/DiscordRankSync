@@ -21,7 +21,6 @@ import fr.bebedlastreat.discord.common.logger.VelocityLogger;
 import fr.bebedlastreat.discord.common.objects.DiscordActivity;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.common.sql.SqlHandler;
-import fr.bebedlastreat.discord.common.sqlite.SQLiteHandler;
 import fr.bebedlastreat.discord.redisbungee.RedisBungeeManager;
 import fr.bebedlastreat.discord.velocity.commands.VelocityClaimBoostCommand;
 import fr.bebedlastreat.discord.velocity.commands.VelocityLinkCommand;
@@ -87,6 +86,7 @@ public class DiscordSyncVelocity {
         saveDefaultConfig();
 
         server.getChannelRegistrar().register(MinecraftChannelIdentifier.from(DiscordCommon.PLUGIN_CHANNEL));
+        server.getChannelRegistrar().register(MinecraftChannelIdentifier.from(DiscordCommon.COMMAND_CHANNEL));
 
         String token = getConfig().getString("bot-token");
         String guildId = getConfig().getString("guild-id");
@@ -114,13 +114,6 @@ public class DiscordSyncVelocity {
                 credentials.put("driver", section.getString("driver", SqlHandler.DEFAULT_DRIVER));
                 break;
             }
-            case SQLITE: {
-                ConfigurationSection section = getConfig().getSection("sqlite");
-                credentials.put("file", section.getString("file"));
-                credentials.put("table", section.getString("table"));
-                credentials.put("driver", section.getString("driver", SQLiteHandler.DEFAULT_DRIVER));
-                break;
-            }
         }
 
         Map<String, String> messages = new HashMap<>();
@@ -146,7 +139,7 @@ public class DiscordSyncVelocity {
                         new DiscordActivity(config.getBoolean("activity.enable", false), config.getString("activity.type", "PLAYING"), config.getString("activity.message", "DiscordRankSync")),
                         config.getInteger("join-message-delay", 0),
                         config.getInteger("refresh-delay", 30),
-                        getDataDirectory().toFile());
+                        config.getInteger("boost-delay", -1));
 
                 EventManager eventManager = server.getEventManager();
                 CommandManager commandManager = server.getCommandManager();

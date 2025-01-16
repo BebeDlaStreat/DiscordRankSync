@@ -128,6 +128,7 @@ public class DiscordSyncBukkit extends JavaPlugin {
                     initMetrics();
                 } else {
                     DiscordCommon.getLogger().log(Level.INFO, "Moving on standalone mode");
+                    DiscordCommon.getLogger().log(Level.WARNING, "Until you have DiscordRankSync on your proxy server, you are vulnerable to console command execution!");
                     common.getJda().shutdown();
                     common.setStandalone(true);
                     getServer().getMessenger().registerIncomingPluginChannel(this, DiscordCommon.PLUGIN_CHANNEL, new DiscordPluginMessageListener());

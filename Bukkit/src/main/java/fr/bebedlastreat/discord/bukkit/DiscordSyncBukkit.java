@@ -5,6 +5,8 @@ import fr.bebedlastreat.discord.bukkit.implementations.SpigotConsoleExecutor;
 import fr.bebedlastreat.discord.bukkit.implementations.SpigotOnlineCheck;
 import fr.bebedlastreat.discord.bukkit.listeners.DiscordPluginMessageListener;
 import fr.bebedlastreat.discord.bukkit.listeners.SpigotJoinListener;
+import fr.bebedlastreat.discord.bukkit.pubsub.CommandPubSub;
+import fr.bebedlastreat.discord.bukkit.pubsub.DataPubSub;
 import fr.bebedlastreat.discord.common.DiscordCommon;
 import fr.bebedlastreat.discord.common.charts.*;
 import fr.bebedlastreat.discord.common.enums.DatabaseType;
@@ -93,6 +95,14 @@ public class DiscordSyncBukkit extends JavaPlugin {
             }
         }
 
+        boolean redisEnabled = getConfig().getBoolean("redis.enable", false);
+        if (redisEnabled) {
+            ConfigurationSection redisSection = getConfig().getConfigurationSection("redis");
+            credentials.put("redis-host", redisSection.getString("host"));
+            credentials.put("redis-port", redisSection.getInt("port"));
+            credentials.put("redis-password", redisSection.getString("password"));
+        }
+
         Map<String, String> messages = new HashMap<>();
         ConfigurationSection messagesSection = getConfig().getConfigurationSection("messages");
         for (String key : messagesSection.getKeys(false)) {
@@ -117,7 +127,8 @@ public class DiscordSyncBukkit extends JavaPlugin {
                         getConfig().getInt("join-message-delay", 0),
                         getConfig().getInt("refresh-delay", 30),
                         getConfig().getInt("boost-delay", -1),
-                        getDataFolder());
+                        getDataFolder(),
+                        redisEnabled);
 
                 boolean standalone = getConfig().getBoolean("standalone", false);
 
@@ -127,11 +138,24 @@ public class DiscordSyncBukkit extends JavaPlugin {
                     pluginManager.registerEvents(new SpigotJoinListener(common), this);
                     initMetrics();
                 } else {
+                    if (!redisEnabled) {
+                        for (int i = 0; i < 5; i++) {
+                            DiscordCommon.getLogger().log(Level.SEVERE, "Redis is not enabled, please enable it to use standalone mode");
+                        }
+                    }
                     DiscordCommon.getLogger().log(Level.INFO, "Moving on standalone mode");
                     common.getJda().shutdown();
                     common.setStandalone(true);
-                    getServer().getMessenger().registerIncomingPluginChannel(this, DiscordCommon.PLUGIN_CHANNEL, new DiscordPluginMessageListener());
-                    getServer().getMessenger().registerIncomingPluginChannel(this, DiscordCommon.COMMAND_CHANNEL, new DiscordPluginMessageListener());
+                    if (!redisEnabled) {
+                        getServer().getMessenger().registerIncomingPluginChannel(this, DiscordCommon.DATA_CHANNEL, new DiscordPluginMessageListener());
+                    } else {
+                        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+                            common.getRedisHandler().subscribe(DiscordCommon.DATA_CHANNEL, new DataPubSub(common));
+                        });
+                        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+                            common.getRedisHandler().subscribe(DiscordCommon.COMMAND_CHANNEL, new CommandPubSub(common));
+                        });
+                    }
                 }
 
                 Bukkit.getScheduler().runTask(this, () -> {

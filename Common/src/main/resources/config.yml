@@ -1,8 +1,10 @@
 # support: https://bebedlastreat.fr/discord
 
 bot-token: "token"
-guild-id: "0000000000000000000" # id of the discord server the bot should fetch roles
-rename: true # rename a user to his minecraft name when he links his account
+# id of the discord server the bot should fetch roles
+guild-id: "0000000000000000000"
+# rename a user to his minecraft name when he links his account
+rename: true
 
 ranks:
   # warning: when a user unlink his account, he will get removed of all configured roles
@@ -18,26 +20,42 @@ activity:
 # delay for plugin message/placeholder api refresh
 refresh-delay: 30
 
-database: "SQLite" # Currently only MariaDB is supported but I will include later MongoDB support if it is requested (sql is better for use of this plugin)
+# Currently only MariaDB and SQLITE are supported but I will include later MongoDB support if it is requested
+database: "SQLite"
 
+# if enabled, reward-command will only be executed once on first time link
+one-time-reward: true
+# command executed when a player links his account (use {player} as placeholder for player name), warning it's a list: ["command1", "command2"]
+reward-command: []
 
-one-time-reward: true # if enabled, reward-command will only be executed once on first time link
-reward-command: [] # command executed when a player links his account (use {player} as placeholder for player name), warning it's a list: ["command1", "command2"]
+# command to execute when a player unlink
+unlink-command: []
 
-unlink-command: [] # command to execute when a player unlink
+# command to execute when a player with boost rank execute /claimboost, can be executed every months
+boost-reward: []
 
-boost-reward: [] # command to execute when a player with boost rank execute /claimboost, can be executed every months
+# delay in days to wait before a player can claim his boost reward again, -1 for current month length
+boost-delay: -1
 
-boost-delay: -1 # delay in days to wait before a player can claim his boost reward again, -1 for current month length
+# delay in ticks (50ms) to send the join message, useful when you have a lobby plugin which send a welcome message
+join-message-delay: 0
 
-join-message-delay: 0 # delay in ticks (50ms) to send the join message, useful when you have a lobby plugin which send a welcome message
-
-date-format: "MM/dd/yy hh:mm aa" # see https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
+# see https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
+date-format: "MM/dd/yy hh:mm aa"
 
 # Enable it if you put the jar on your spigot servers and you have it running on your proxy. It will prevent bot start and read plugin messages from the proxy. It's useful for PlaceholderAPI.
 # Incompatible with redis bungee
 standalone: false
 
+# Enable it if you have a bungee server and you want to use redis to communicate between your spigot servers and your bungee server
+# needed for standalone mode and command fowarding
+redis:
+  enable: false
+  host: "127.0.0.1"
+  port: 6379
+  password: ""
+
+# fill this is you chose MySQL as database
 sql:
   ip: "127.0.0.1"
   port: 3306

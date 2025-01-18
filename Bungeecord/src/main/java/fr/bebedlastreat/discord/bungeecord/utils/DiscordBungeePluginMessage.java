@@ -9,6 +9,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
 @UtilityClass
@@ -24,7 +25,7 @@ public class DiscordBungeePluginMessage {
         if (server != null) {
             ServerInfo info = server.getInfo();
             if (info != null) {
-                player.getServer().getInfo().sendData(DiscordCommon.PLUGIN_CHANNEL, out.toByteArray());
+                player.getServer().getInfo().sendData(DiscordCommon.DATA_CHANNEL, out.toByteArray());
             }
         }
     }
@@ -32,10 +33,20 @@ public class DiscordBungeePluginMessage {
     public void sendData(ProxiedPlayer player) {
         DiscordCommon.getInstance().getData(new BungeePlayer(player), (linked, discordName, boosting) -> {
             DiscordBungeePluginMessage.sendData(player, linked, discordName, boosting);
+            if (DiscordCommon.getInstance().isRedisEnabled()) {
+                ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                out.writeUTF(player.getUniqueId().toString());
+                out.writeBoolean(linked);
+                out.writeUTF(discordName);
+                out.writeBoolean(boosting);
+                byte[] bytes = out.toByteArray();
+                String message = new String(bytes, StandardCharsets.UTF_8);
+                DiscordCommon.getInstance().getRedisHandler().send(DiscordCommon.DATA_CHANNEL, message);
+            }
         });
     }
 
-    public void sendCommand(ProxiedPlayer player, String command) {
+    /*public void sendCommand(ProxiedPlayer player, String command) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF(command);
         Server server = player.getServer();
@@ -47,5 +58,5 @@ public class DiscordBungeePluginMessage {
         } else {
             DiscordCommon.getLogger().log(Level.WARNING, "Can't dispatch command for " + player.getName() + " -> /" + command);
         }
-    }
+    }*/
 }

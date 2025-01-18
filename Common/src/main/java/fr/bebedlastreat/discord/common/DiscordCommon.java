@@ -15,6 +15,7 @@ import fr.bebedlastreat.discord.common.objects.DiscordActivity;
 import fr.bebedlastreat.discord.common.objects.DiscordMember;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
 import fr.bebedlastreat.discord.common.objects.WaitingLink;
+import fr.bebedlastreat.discord.common.redis.RedisHandler;
 import fr.bebedlastreat.discord.common.sql.SqlCredentials;
 import fr.bebedlastreat.discord.common.sql.SqlFetch;
 import fr.bebedlastreat.discord.common.sql.SqlHandler;
@@ -54,8 +55,8 @@ public class DiscordCommon {
     @Getter
     private static DiscordCommon instance;
     public static final int METRICS_ID = 19271;
-    public static final String PLUGIN_CHANNEL = "discordranksync:data";
-    public static final String COMMAND_CHANNEL = "discordranksync:command";
+    public static final String DATA_CHANNEL = "discordrs:data";
+    public static final String COMMAND_CHANNEL = "discordrs:command";
 
     private final String token;
     private final String guildId;
@@ -88,6 +89,8 @@ public class DiscordCommon {
     private final int joinMessageDelay;
     private final int refreshDelay;
     private final int boostDelay;
+    private final boolean redisEnabled;
+    private final RedisHandler redisHandler;
 
     private boolean standalone = false;
     private boolean redisBungee = false;
@@ -116,7 +119,9 @@ public class DiscordCommon {
                          int joinMessageDelay,
                          int refreshDelay,
                          int boostDelay,
-                         File dataFolder) throws InterruptedException {
+                         File dataFolder,
+                         boolean redisEnabled
+    ) throws InterruptedException {
         this.token = token;
         this.guildId = guildId;
         this.rename = rename;
@@ -170,6 +175,14 @@ public class DiscordCommon {
 
         if (databaseFetch == null) {
             throw new RuntimeException("No database storage found, please verify you properly configured the plugin");
+        }
+
+        this.redisEnabled = redisEnabled;
+        if (redisEnabled) {
+            redisHandler = new RedisHandler((String) credentials.get("redis-host"), (int) credentials.get("redis-port"), (String) credentials.get("redis-password"));
+            redisHandler.init();
+        } else {
+            redisHandler = null;
         }
 
         this.jda = JDABuilder.createDefault(token)

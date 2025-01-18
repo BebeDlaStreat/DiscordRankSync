@@ -69,7 +69,7 @@ public class DiscordSyncBungee extends Plugin {
         saveDefaultConfig();
         this.adventure = BungeeAudiences.create(this);
 
-        getProxy().registerChannel(DiscordCommon.PLUGIN_CHANNEL);
+        getProxy().registerChannel(DiscordCommon.DATA_CHANNEL);
         getProxy().registerChannel(DiscordCommon.COMMAND_CHANNEL);
 
         String token = getConfig().getString("bot-token");
@@ -106,6 +106,12 @@ public class DiscordSyncBungee extends Plugin {
                 break;
             }
         }
+        boolean redisEnabled = getConfig().getBoolean("redis.enable", false);
+        if (redisEnabled) {
+            credentials.put("redis-host", getConfig().getString("redis.host"));
+            credentials.put("redis-port", getConfig().getInt("redis.port"));
+            credentials.put("redis-password", getConfig().getString("redis.password"));
+        }
 
         Map<String, String> messages = new HashMap<>();
         Configuration messagesSection = getConfig().getSection("messages");
@@ -131,7 +137,8 @@ public class DiscordSyncBungee extends Plugin {
                         config.getInt("join-message-delay", 0),
                         config.getInt("refresh-delay", 30),
                         config.getInt("boost-delay", -1),
-                        getDataFolder());
+                        getDataFolder(),
+                        redisEnabled);
 
                 PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
                 registerCommands(pluginManager);

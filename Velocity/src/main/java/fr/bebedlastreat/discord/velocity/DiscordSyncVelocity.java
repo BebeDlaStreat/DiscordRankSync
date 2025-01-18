@@ -86,7 +86,7 @@ public class DiscordSyncVelocity {
         instance = this;
         saveDefaultConfig();
 
-        server.getChannelRegistrar().register(MinecraftChannelIdentifier.from(DiscordCommon.PLUGIN_CHANNEL));
+        server.getChannelRegistrar().register(MinecraftChannelIdentifier.from(DiscordCommon.DATA_CHANNEL));
         server.getChannelRegistrar().register(MinecraftChannelIdentifier.from(DiscordCommon.COMMAND_CHANNEL));
 
         String token = getConfig().getString("bot-token");
@@ -123,6 +123,12 @@ public class DiscordSyncVelocity {
                 break;
             }
         }
+        boolean redisEnabled = getConfig().getBoolean("redis.enable", false);
+        if (redisEnabled) {
+            credentials.put("redis-host", getConfig().getString("redis.host"));
+            credentials.put("redis-port", getConfig().getInteger("redis.port"));
+            credentials.put("redis-password", getConfig().getString("redis.password"));
+        }
 
         Map<String, String> messages = new HashMap<>();
         ConfigurationSection messagesSection = getConfig().getSection("messages");
@@ -148,7 +154,8 @@ public class DiscordSyncVelocity {
                         config.getInteger("join-message-delay", 0),
                         config.getInteger("refresh-delay", 30),
                         config.getInteger("boost-delay", -1),
-                        getDataDirectory().toFile());
+                        getDataDirectory().toFile(),
+                        redisEnabled);
 
                 EventManager eventManager = server.getEventManager();
                 CommandManager commandManager = server.getCommandManager();

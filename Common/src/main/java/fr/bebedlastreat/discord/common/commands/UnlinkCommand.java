@@ -34,9 +34,11 @@ public class UnlinkCommand implements ICommonCommand {
             common.setLinkCount(common.getLinkCount() - 1);
 
             if (!common.getUnlinkCommandList().isEmpty()) {
-                for (String command : common.getUnlinkCommandList()) {
-                    common.getConsoleExecutor().execute(command.replace("{player}", player.getName()).replace("{uuid}", player.getUniqueId().toString()), player);
-                }
+                common.getRunner().runLater(() -> {
+                    for (String command : common.getUnlinkCommandList()) {
+                        common.getConsoleExecutor().execute(command.replace("{player}", player.getName()).replace("{uuid}", player.getUniqueId().toString()), player);
+                    }
+                }, 0);
             }
 
             common.getRunner().run(() -> {

@@ -92,9 +92,11 @@ public class SlashCommandListener extends ListenerAdapter {
                 String name = common.getDatabaseFetch().name(UUID.fromString(uuid));
 
                 if (!common.getUnlinkCommandList().isEmpty()) {
-                    for (String command : common.getUnlinkCommandList()) {
-                        common.getConsoleExecutor().execute(command.replace("{player}", name).replace("{uuid}", uuid), null);
-                    }
+                    common.getRunner().runLater(() -> {
+                        for (String command : common.getUnlinkCommandList()) {
+                            common.getConsoleExecutor().execute(command.replace("{player}", name).replace("{uuid}", uuid), null);
+                        }
+                    }, 0);
                 }
             } catch (Exception ex) {
                 DiscordCommon.getLogger().log(Level.SEVERE, "Can't fetch minecraft user data from discord user " + user.getId());

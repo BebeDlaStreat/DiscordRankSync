@@ -165,7 +165,7 @@ public class SqlFetch implements IDatabaseFetch {
 
     @Override
     public boolean canBoost(UUID uuid) {
-        return (Boolean) sql.query("SELECT finish_time FROM " + sql.getBoostTable(), rs -> {
+        return (Boolean) sql.query("SELECT finish_time FROM " + sql.getBoostTable() + " WHERE uuid='" + uuid + "'", rs -> {
             boolean result = true;
             try {
                 if (rs.next()) {
@@ -181,7 +181,7 @@ public class SqlFetch implements IDatabaseFetch {
 
     @Override
     public long getNextBoost(UUID uuid) {
-        return (Long) sql.query("SELECT finish_time FROM " + sql.getBoostTable(), rs -> {
+        return (Long) sql.query("SELECT finish_time FROM " + sql.getBoostTable() + " WHERE uuid='" + uuid + "'", rs -> {
             long result = 0;
             try {
                 if (rs.next()) {

@@ -11,6 +11,8 @@ import fr.bebedlastreat.discord.common.listeners.JoinListener;
 import fr.bebedlastreat.discord.common.listeners.SlashCommandListener;
 import fr.bebedlastreat.discord.common.logger.DefaultLogger;
 import fr.bebedlastreat.discord.common.logger.IDiscordLogger;
+import fr.bebedlastreat.discord.common.mongodb.MongoDBFetch;
+import fr.bebedlastreat.discord.common.mongodb.MongoDBHandler;
 import fr.bebedlastreat.discord.common.objects.DiscordActivity;
 import fr.bebedlastreat.discord.common.objects.DiscordMember;
 import fr.bebedlastreat.discord.common.objects.DiscordRank;
@@ -165,6 +167,13 @@ public class DiscordCommon {
                         (String) credentials.get("table"));
                 sqLiteHandler.createDefault();
                 databaseFetch = new SQLiteFetch(sqLiteHandler);
+                break;
+            }
+            case MONGODB: {
+                MongoDBHandler mongoDBHandler = new MongoDBHandler((String) credentials.get("url"), (String) credentials.get("database"), (String) credentials.get("collection"));
+                mongoDBHandler.initConnection();
+
+                databaseFetch = new MongoDBFetch(mongoDBHandler);
                 break;
             }
             default: {

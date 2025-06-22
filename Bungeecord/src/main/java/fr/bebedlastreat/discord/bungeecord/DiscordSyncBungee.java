@@ -105,6 +105,13 @@ public class DiscordSyncBungee extends Plugin {
                 credentials.put("table", section.getString("table"));
                 break;
             }
+            case MONGODB: {
+                Configuration section = getConfig().getSection("mongodb");
+                credentials.put("url", section.getString("url"));
+                credentials.put("database", section.getString("database"));
+                credentials.put("collection", section.getString("collection"));
+                break;
+            }
         }
         boolean redisEnabled = getConfig().getBoolean("redis.enable", false);
         if (redisEnabled) {

@@ -20,7 +20,7 @@ activity:
 # delay for plugin message/placeholder api refresh
 refresh-delay: 30
 
-# Currently only MariaDB and SQLITE are supported but I will include later MongoDB support if it is requested
+# MariaDB, SQLite or MongoDB
 database: "SQLite"
 
 # if enabled, reward-command will only be executed once on first time link
@@ -70,6 +70,11 @@ sqlite:
   file: "discordranksync.db"
   table: "discord_sync"
   driver: "org.sqlite.JDBC"
+
+mongodb:
+  url: "mongodb://"
+  database: "discord"
+  collection: "discord_sync"
 
 # warning: no legacy color support, you must use minimessage format: https://docs.advntr.dev/minimessage/format.html)
 messages:

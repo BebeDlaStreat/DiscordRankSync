@@ -3,6 +3,7 @@ package fr.bebedlastreat.discord.common.enums;
 public enum DatabaseType {
     SQL,
     SQLITE,
+    MONGODB
     ;
 
     public static DatabaseType getByName(String name) {
@@ -14,6 +15,9 @@ public enum DatabaseType {
             }
             case "sqlite": {
                 return DatabaseType.SQLITE;
+            }
+            case "mongodb": {
+                return DatabaseType.MONGODB;
             }
         }
         return null;

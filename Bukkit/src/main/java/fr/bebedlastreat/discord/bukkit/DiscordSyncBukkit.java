@@ -93,6 +93,13 @@ public class DiscordSyncBukkit extends JavaPlugin {
                 credentials.put("table", section.getString("table"));
                 break;
             }
+            case MONGODB: {
+                ConfigurationSection section = getConfig().getConfigurationSection("mongodb");
+                credentials.put("url", section.getString("url"));
+                credentials.put("database", section.getString("database"));
+                credentials.put("collection", section.getString("collection"));
+                break;
+            }
         }
 
         boolean redisEnabled = getConfig().getBoolean("redis.enable", false);

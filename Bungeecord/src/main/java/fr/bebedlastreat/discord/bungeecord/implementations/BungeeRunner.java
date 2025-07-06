@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class BungeeRunner implements ICommonRunner {
     @Override
     public void run(Runnable runnable) {
-        runLater(runnable, 0);
+        runnable.run();
     }
     @Override
     public void runAsync(Runnable runnable) {
